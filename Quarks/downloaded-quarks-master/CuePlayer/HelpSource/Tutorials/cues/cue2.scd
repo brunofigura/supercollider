@@ -1,1 +1,0 @@
-{ "this is cue2".postln }
