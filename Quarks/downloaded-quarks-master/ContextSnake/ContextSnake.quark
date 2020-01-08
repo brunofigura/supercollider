@@ -1,0 +1,8 @@
+(
+	\name: 			"ContextSnake",
+	\path: 			"ContextSnake",
+	\summary:		"A Markov pattern with variable context depth",
+	\author: 		"Gerhard Nierhaus, Alberto de Campo",
+	\organization: 	"IEM Graz, UdK Berlin",
+	\since:			2006
+)
