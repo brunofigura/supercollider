@@ -1,0 +1,65 @@
+TITLE:: Osc1
+summary:: use buffer as one-shot envelope
+categories:: UGens>Envelopes
+related:: Classes/BufRd
+
+DESCRIPTION::
+
+An envelope generator that reads through a buffer once.
+Useful e.g. for the Wavesets quark.
+
+code::
+	// use Osc1 as a grain envelope
+c = Buffer.sendCollection(s, Env.perc.discretize, 1);
+
+{ Blip.ar(110, 20, 0.2) * Osc1.ar(c, 0.3) }.play;
+{ Blip.ar(110, 20, 0.2) * Osc1.ar(c, 0.1) }.play;
+
+// minimal pulsar synthesis
+SynthDef(\help_osc1, { |out, amp = 0.1, pan, buf, freq = (60.midicps)|
+	Out.ar(out, Pan2.ar(Osc1.ar(buf, 1/freq), pan, amp));
+}).add;
+
+(instrument: \help_osc1).play;
+
+b = Buffer.sendCollection(s, { 1.0.rand }!1024);
+
+Pbind(\instrument, \help_osc1, \buf, b, \freq, Pseq((1..32) * 20), \dur, 0.1).trace.play;
+s.scope;
+::
+
+
+CLASSMETHODS::
+
+METHOD:: ar, kr
+create ar/kr buffer based envelope.
+
+bufnum - a buffer on the server, to be used as an envelope.
+dur - how long  to read through the table
+
+ARGUMENT:: buf
+the buffer to use as envelope
+
+ARGUMENT:: dur
+the duration of the envelope
+
+returns:: a BufRd Ugen.
+
+EXAMPLES::
+code::
+(
+// fill 2 different tables to be used for amplitude envelopes.
+t = Signal.sineFill( 1024, 1.0/#[ 1, 2, 3, 5, 8, 13, 21, 34, 55 ].scramble );
+v = Signal.sineFill( 1024, 1.0/#[ 1, 2, 3, 5, 8, 13, 21, 34, 55 ].scramble );
+
+// force the last sample of the tables to zero.
+// this ensures that the waveform ends precisely on time.
+t.put(t.size-1, 0);
+v.put(v.size-1, 0);
+
+a = Buffer.sendCollection(s, t, 1);
+b = Buffer.sendCollection(s, v, 1);
+)
+	// play them
+{ LFSaw.ar([110, 164], 0.3) * Osc1.ar([a, b], 4, doneAction: 2) }.play;
+::
