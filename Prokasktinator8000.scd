@@ -17,11 +17,11 @@ SendReply
 //SynthDef sound i = mic
 
 (
-SynthDef(\guard, {
+Ndef(\guard, {
 	var input, sig;
 	input = SoundIn.ar(0);
 	sig = DelayL.ar(input, 0.3, 0.3);
-}).add;
+}).play;
 )
 
-a = Synth(\guard);
+
