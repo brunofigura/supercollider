@@ -18,15 +18,42 @@ SendReply
 
 (
 Ndef(\guard, {
-	var input, sig;
-	input = SoundIn.ar(0);
-	sig = DelayL.ar(input, 0.3, 0.3);
-	//Amplitude.kr(sig, 0.01, 0.01);
-	//if (DetectSilence.ar(sig, 0.5, 1, 2) < 1){postln("psssst");
-});
+	var in, amp, trig;
+	trig = Impulse.ar(2);
+	in = SoundIn.ar(0);
+	amp = Amplitude.kr(in, 0.01, 0.01);
+	SendReply.ar(trig, '/amp', amp);
+	0;					//sicherung gegen DC
+}).play;
+)
+(
+var timeDelta, startTime, running;
+timeDelta = 0;
+running = false;
+OSCdef(\auslöser, {|msg, time|
+	var thresh, amp;
+	thresh = 0.001;
+	amp = msg[3];
+	if(amp < thresh){
+		if(running){
+			timeDelta = time - startTime;
+		}{
+			running = true;
+			startTime = time;
+		};
+	}{
+		timeDelta = 0;
+		running = false;
+	};
+	if(timeDelta > 2){
+//hier kommt synthdef rein
+
+
+	};
+[running, timeDelta, amp].postln;
+}, '/amp')
 )
 
-a = Ndef(\guard);
 
 
 
@@ -36,10 +63,11 @@ a = Ndef(\guard);
 
 (
 SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5|
-	var sig, mod, rampenv;
+	var sig, mod, rampenv, modfreq;
 
 //rampenv soll mithilfe von env den mod schneller werden lassen
 //	rampenv = Env.kr([0, modamt], [modattack]);
+	modfreq = Env.new()
 	mod = [SinOsc.ar(10),LFTri.ar(15)] * modamt;
 	sig = SinOsc.ar(440, mod);
 	Out.ar(out, sig.tanh * amp);
@@ -52,10 +80,12 @@ x = Synth(\nervotron3000, [
 ]);
 )
 
-x.free
+(
+x.set(\modamt, 24,
+	\amp, 0.3,
+);
+)
 
+x.free;
 
-
-s.freeAll;
 s.reboot;
-
