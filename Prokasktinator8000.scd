@@ -23,27 +23,30 @@ Ndef(\guard, {
 	sig = DelayL.ar(input, 0.3, 0.3);
 	//Amplitude.kr(sig, 0.01, 0.01);
 	//if (DetectSilence.ar(sig, 0.5, 1, 2) < 1){postln("psssst");
-}).play;
+});
 )
 
-
-
-
-// KEIN TON
+a = Ndef(\guard);
 
 (
-SynthDef(\nervotron3000, { | out |
-	var freq, sig, trig, env;
-	trig = Dust.kr(2);
-	env = EnvGen.kr(Env.perc(0.02, 0.5), trig);
-	freq = exprand(100, 10000);
-	sig = SinOsc.ar(1000, SinOsc(20)) * env;
-	Out.ar(out, sig * 0.7)
+SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5|
+	var sig, mod, rampenv;
+
+//rampenv soll mithilfe von env den mod schneller werden lassen
+//	rampenv = Env.kr([0, modamt], [modattack]);
+	mod = [SinOsc.ar(10),LFTri.ar(15)] * modamt;
+	sig = SinOsc.ar(440, mod);
+	Out.ar(out, sig.tanh * amp);
 }).add;
 )
 
-x = Synth(\nervotron3000);
+(
+x = Synth(\nervotron3000, [
+	\modamt, 10;
+]);
+)
 
+x.free
 
 
 
