@@ -28,6 +28,12 @@ Ndef(\guard, {
 
 a = Ndef(\guard);
 
+
+
+
+//idee: über zeit soll bei mod, beide frequenzen in verschieden richtungen wandern
+
+
 (
 SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5|
 	var sig, mod, rampenv;
