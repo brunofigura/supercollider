@@ -67,9 +67,9 @@ SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5, moden
 
 //rampenv soll mithilfe von env den mod schneller werden lassen
 //	rampenv = Env.kr([0, modamt], [modattack]);
-	modfreq = Env.new([0, 1, 0.5, 0], [4,2,4]).ar(0)* modendfreq;
+	modfreq = Env.new([0, 1, 0.5, 0.3], [4,2,4]).ar(0)* modendfreq;
 	mod = [SinOsc.ar(modfreq),LFTri.ar(modfreq)] * modamt;
-	sig = SinOsc.ar(440, mod);
+	sig = LeakDC.ar(SinOsc.ar(440, mod));
 	Out.ar(out, sig.tanh * amp);
 }).add;
 )
@@ -79,7 +79,5 @@ x = Synth(\nervotron3000, [
 	\modamt, 10;
 ]);
 )
-
-
 x.free;
 
