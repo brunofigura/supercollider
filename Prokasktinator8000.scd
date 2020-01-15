@@ -62,13 +62,13 @@ OSCdef(\auslöser, {|msg, time|
 
 
 (
-SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5|
+SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5, modendfreq = 1000|
 	var sig, mod, rampenv, modfreq;
 
 //rampenv soll mithilfe von env den mod schneller werden lassen
 //	rampenv = Env.kr([0, modamt], [modattack]);
-	modfreq = Env.new()
-	mod = [SinOsc.ar(10),LFTri.ar(15)] * modamt;
+	modfreq = Env.new([0, 1, 0.5, 0], [4,2,4]).ar(0)* modendfreq;
+	mod = [SinOsc.ar(modfreq),LFTri.ar(modfreq)] * modamt;
 	sig = SinOsc.ar(440, mod);
 	Out.ar(out, sig.tanh * amp);
 }).add;
@@ -80,12 +80,6 @@ x = Synth(\nervotron3000, [
 ]);
 )
 
-(
-x.set(\modamt, 24,
-	\amp, 0.3,
-);
-)
 
 x.free;
 
-s.reboot;
