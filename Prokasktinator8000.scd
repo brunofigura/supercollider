@@ -58,17 +58,17 @@ OSCdef(\auslöser, {|msg, time|
 
 
 
-//idee: über zeit soll bei mod, beide frequenzen in verschieden richtungen wandern
+//(CHECK)-------idee: über zeit soll bei mod, beide frequenzen in verschieden richtungen wandern
+//(CHECK)-------modenv soll loopen
+// panning der kanäle mit lfo
 
 
 (
-SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modattack = 0.5, modendfreq = 1000|
-	var sig, mod, rampenv, modfreq;
-
-//rampenv soll mithilfe von env den mod schneller werden lassen
-//	rampenv = Env.kr([0, modamt], [modattack]);
-	modfreq = Env.new([0, 1, 0.5, 0.3], [4,2,4]).ar(0)* modendfreq;
-	mod = [SinOsc.ar(modfreq),LFTri.ar(modfreq)] * modamt;
+SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modfreq = 200, moddur = 2|
+	var sig, mod, modenv, modtrig;												//modfreq-> freq wo der mod startet ( er geht dann bis null und 																				bis 2 * modfreq)
+	modtrig = Impulse.kr(1/moddur);
+	modenv = Env.new([0, (modfreq - 1), 0], [(moddur/2), (moddur/2)], 'lin').ar(0, modtrig);
+	mod = [SinOsc.ar(modfreq - modenv),LFTri.ar(modfreq + modenv)] * modamt;				//basefreq +- env
 	sig = LeakDC.ar(SinOsc.ar(440, mod));
 	Out.ar(out, sig.tanh * amp);
 }).add;
