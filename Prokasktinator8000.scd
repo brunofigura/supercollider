@@ -1,3 +1,4 @@
+
 /*
 - synthdef der ton erzeugt
 - synthdef der soundinput mic hat und analysiert wird
@@ -30,7 +31,7 @@ Ndef(\guard, {
 var timeDelta, startTime, running;
 timeDelta = 0;
 running = false;
-OSCdef(\auslöser, {|msg, time|
+OSCdef(\ausloeser, {|msg, time|
 	var thresh, amp;
 	thresh = 0.001;
 	amp = msg[3];
@@ -47,7 +48,11 @@ OSCdef(\auslöser, {|msg, time|
 	};
 	if(timeDelta > 2){
 //hier kommt synthdef rein
-
+(
+x = Synth(\nervotron3000, [
+	\modamt, 10;
+]);
+)
 
 	};
 [running, timeDelta, amp].postln;
@@ -79,5 +84,6 @@ x = Synth(\nervotron3000, [
 	\modamt, 10;
 ]);
 )
+
 x.free;
 
