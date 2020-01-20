@@ -69,7 +69,7 @@ x = Synth(\nervotron3000, [
 
 
 (
-SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 0.2, modfreq = 200, moddur = 2|
+SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur = 2|
 	var sig, mod, modenv, modtrig;												//modfreq-> freq wo der mod startet ( er geht dann bis null und 																				bis 2 * modfreq)
 	modtrig = Impulse.kr(1/moddur);
 	modenv = Env.new([0, (modfreq - 1), 0], [(moddur/2), (moddur/2)], 'lin').ar(0, modtrig);
