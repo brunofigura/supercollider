@@ -31,7 +31,7 @@
 a = Synth(\"1");
 b = Synth(\"2");
 c = Synth(\hallo);
-
+s.reboot;
 
 //soweit die Strategie
 f = {
@@ -40,6 +40,11 @@ f = {
 	zaehler++;
 }
 
+k = {
+	var p = [1, 2, hallo];
+	Synth(\p[i % p.size]);
+	i++;
+}
 
 
 
