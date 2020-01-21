@@ -1,4 +1,4 @@
-(SynthDef(\"1", {|out = 0|
+(SynthDef(\1, {|out = 0|
 	var sig, mod, modenv, trig;
 	trig = Impulse.kr(1/8);
 	modenv = Env.new([0, 1, 0], [4, 4], loopNode: 0).ar(0, trig) * 100;
@@ -8,7 +8,7 @@
 }).add;
 )
 
-(SynthDef(\"2", {|out = 0|
+(SynthDef(\2, {|out = 0|
 	var sig, mod, modenv, trig;
 	trig = Impulse.kr(1/2);
 	modenv = Env.new([0, 1, 0], [1, 1], loopNode: 0).ar(0, trig) * 10;
@@ -28,8 +28,8 @@
 }).add;
 )
 
-a = Synth(\"1");
-b = Synth(\"2");
+a = Synth(\1);
+b = Synth(\2);
 c = Synth(\hallo);
 s.reboot;
 
@@ -39,14 +39,18 @@ f = {
 	Synth(\"zaehler");
 	zaehler++;
 }
-
+(
 k = {
+	var i = 0;
 	var p = [1, 2, hallo];
+	i.postln;
 	Synth(\p[i % p.size]);
-	i++;
+	i = i+1;
 }
+)
 
-
+~zahl = 1;
+Synth(\'zahl');
 
 
 
