@@ -18,7 +18,7 @@
 }).add;
 )
 
-(SynthDef(\hallo, {|out = 0|
+(SynthDef(\3, {|out = 0|
 	var sig, mod, modenv, trig;
 	trig = Impulse.kr(1);
 	modenv = Env.new([0, 1, 0], [0.25, 0.75], loopNode: 0).ar(0, trig) * 1000;
@@ -28,10 +28,18 @@
 }).add;
 )
 
+
+
 a = Synth(\1);
 b = Synth(\2);
 c = Synth(\hallo);
 s.reboot;
+
+
+d = [\1, \2, \3];
+
+Synth(d[i % d.size])
+
 
 //soweit die Strategie
 f = {
@@ -39,18 +47,21 @@ f = {
 	Synth(\"zaehler");
 	zaehler++;
 }
-(
-k = {
-	var i = 0;
-	var p = [1, 2, hallo];
-	i.postln;
-	Synth(\p[i % p.size]);
-	i = i+1;
-}
-)
 
-~zahl = 1;
-Synth(\'zahl');
+ i = 0;
+({
+
+	var p = [\1, \2, \3];
+	i.postln;
+	Synth(p[i % p.size]);
+	i = i+1;
+}.value;)
+
+
+
+k.value
+
+
 
 
 
