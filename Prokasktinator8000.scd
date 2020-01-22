@@ -1,4 +1,3 @@
-
 /*
 - synthdef der ton erzeugt
 - synthdef der soundinput mic hat und analysiert wird
@@ -8,14 +7,44 @@
 
 // Server zeugs
 //ugen -sendreply um antwort von server zu bekommen
-SendReply
-
-
 
 //such unter analysis ugens!
 //man bräuchte OSCdef
 
-//Ndef i = mic
+~synthindex = 0;
+~syntharray = [\nervotron1000, \nervotron2000, \nervotron3000];
+
+
+(
+SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur = 2|
+	var sig, mod, modenv, modtrig;												//modfreq-> freq wo der mod startet ( er geht dann bis null und 																				bis 2 * modfreq)
+	modtrig = Impulse.kr(1/moddur);
+	modenv = Env.new([0, (modfreq - 1), 0], [(moddur/2), (moddur/2)], 'lin').ar(0, modtrig);
+	mod = [SinOsc.ar(modfreq - modenv),LFTri.ar(modfreq + modenv)] * modamt;				//basefreq +- env
+	sig = LeakDC.ar(SinOsc.ar(440, mod));
+	Out.ar(out, sig.tanh * amp);
+}).add;
+)
+
+(SynthDef(\nervotron2000, {|out = 0|
+	var sig, mod, modenv, trig;
+	trig = Impulse.kr(1/2);
+	modenv = Env.new([0, 1, 0], [1, 1], loopNode: 0).ar(0, trig) * 10;
+	mod = SinOsc.ar(40) * modenv;
+	sig = SinOsc.ar([800, 201], mod) * 0.3;
+	Out.ar(out, sig);
+}).add;
+)
+
+(SynthDef(\nervotron1000, {|out = 0|
+	var sig, mod, modenv, trig;
+	trig = Impulse.kr(1);
+	modenv = Env.new([0, 1, 0], [0.25, 0.75], loopNode: 0).ar(0, trig) * 1000;
+	mod = SinOsc.ar(50) * modenv;
+	sig = SinOsc.ar([1000, 999], mod) * 0.3;
+	Out.ar(out, sig);
+}).add;
+)
 
 (
 Ndef(\guard, {
@@ -24,7 +53,7 @@ Ndef(\guard, {
 	in = SoundIn.ar(0);
 	amp = Amplitude.kr(in, 0.01, 0.01);
 	SendReply.ar(trig, '/amp', amp);
-	0;					//sicherung gegen DC
+	0;
 }).play;
 )
 (
@@ -49,9 +78,8 @@ OSCdef(\ausloeser, {|msg, time|
 	if(timeDelta > 2){
 //hier kommt synthdef rein
 (
-x = Synth(\nervotron3000, [
-	\modamt, 10;
-]);
+ a = Synth(~syntharray[~synthindex % ~syntharray.size]);
+			~synthindex = ~synthindex+1;
 )
 
 	};
@@ -59,7 +87,7 @@ x = Synth(\nervotron3000, [
 }, '/amp')
 )
 
-
+a.free;
 
 
 
@@ -68,22 +96,8 @@ x = Synth(\nervotron3000, [
 // panning der kanäle mit lfo
 
 
-(
-SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur = 2|
-	var sig, mod, modenv, modtrig;												//modfreq-> freq wo der mod startet ( er geht dann bis null und 																				bis 2 * modfreq)
-	modtrig = Impulse.kr(1/moddur);
-	modenv = Env.new([0, (modfreq - 1), 0], [(moddur/2), (moddur/2)], 'lin').ar(0, modtrig);
-	mod = [SinOsc.ar(modfreq - modenv),LFTri.ar(modfreq + modenv)] * modamt;				//basefreq +- env
-	sig = LeakDC.ar(SinOsc.ar(440, mod));
-	Out.ar(out, sig.tanh * amp);
-}).add;
-)
 
-(
-x = Synth(\nervotron3000, [
-	\modamt, 10;
-]);
-)
+
 
 x.free;
 
