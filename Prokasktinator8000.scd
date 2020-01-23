@@ -27,16 +27,18 @@ SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur =
 }).add;
 )
 
-(SynthDef(\nervotron2000, {|out = 0, gate = 1, amp = 0.3|
+(SynthDef(\nervotron2000, {|out = 0, amp = 0.3, modamt = 10, modfreq = 40, moddur = 5, gate = 1|
 	var sig, mod, modenv, trig, env;
-	trig = Impulse.kr(1/2);
-	modenv = Env.new([0, 1, 0], [1, 1], loopNode: 0).ar(0, trig) * 10;
-	mod = SinOsc.ar(40) * modenv;
+	trig = Impulse.kr(moddur);
+	modenv = Env.new([0, modamt.clip(1)], [moddur]).ar(0, trig) * 10;					//clip, damit modamt nicht zu hoch übergeben werden kann
+	mod = SinOsc.ar(modfreq * modenv);
 	env = Env.adsr(0.01, 0, 1, 3, 1).ar(2, gate);
 	sig = SinOsc.ar([800, 201], mod) * env;
 	Out.ar(out, sig * amp);
 }).add;
 )
+//test synthdef 2000
+Synth(\nervotron2000, [\modfreq, 800]).play;
 
 (SynthDef(\nervotron1000, {|out = 0, gate = 1, amp = 0.3|
 	var sig, mod, modenv, trig, env;
