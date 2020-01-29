@@ -68,15 +68,22 @@ k.value
 //------Synth-Baustelle-----------
 
 (
-SynthDef(\sirenebuzz, { |out, gate = 1, amp = 0.3, modfreq = 0.5, modamt = 3|
-	var sig1, sig2, env, freqenv, trig;
+SynthDef(\sirenebuzz, { |out, gate = 1, amp1 = 0.3, amp2 = 0.2, modfreq = 0.5, modamt = 3, dist = 1|
+	var sig1, sig2, env, env2 , freqenv, trig, env2mod;
 	trig = LFPulse.ar(1/modfreq);
 	env = Env.adsr(0.4, 0, 1, 1, 1).ar(2, gate);
 	freqenv = Env([1, modamt, 1], [modfreq/2, modfreq/2]).ar(0, trig);
 	sig1 = SinOsc.ar([440, 398] * freqenv) * env;
-	Out.ar(out, sig.tanh * amp);
-	sig2 =
+	Out.ar(out, sig1.tanh * amp1);
+
+	env2mod = Env([3, 1, 3], [10, 10]).ar(0);
+	env2 = LFPulse.ar(env2mod/modfreq);
+	sig2 = LFSaw.ar([150, 155]) * env2 * dist;
+	Out.ar(out, sig2.tanh * amp2);
 }).add;
 )
-w = [1, 2, 3, 4, 5];
-w.collect
+
+a = Synth(\sirenebuzz);
+(a.set(\gate, 1,
+	\dist, 10000
+);)
