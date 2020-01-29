@@ -65,8 +65,18 @@ f = {
 
 k.value
 
+//------Synth-Baustelle-----------
 
-
-
-
-
+(
+SynthDef(\sirenebuzz, { |out, gate = 1, amp = 0.3, modfreq = 0.5, modamt = 3|
+	var sig1, sig2, env, freqenv, trig;
+	trig = LFPulse.ar(1/modfreq);
+	env = Env.adsr(0.4, 0, 1, 1, 1).ar(2, gate);
+	freqenv = Env([1, modamt, 1], [modfreq/2, modfreq/2]).ar(0, trig);
+	sig1 = SinOsc.ar([440, 398] * freqenv) * env;
+	Out.ar(out, sig.tanh * amp);
+	sig2 =
+}).add;
+)
+w = [1, 2, 3, 4, 5];
+w.collect
