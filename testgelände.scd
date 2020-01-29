@@ -8,12 +8,12 @@
 }).add;
 )
 
-(SynthDef(\2, {|out = 0|
+(SynthDef(\2, {|out = 0, modamt = 10, amp = 0.3|
 	var sig, mod, modenv, trig;
 	trig = Impulse.kr(1/2);
-	modenv = Env.new([0, 1, 0], [1, 1], loopNode: 0).ar(0, trig) * 10;
+	modenv = Env.new([0, 1, 0], [1, 1], loopNode: 0).ar(0, trig) * modamt;
 	mod = SinOsc.ar(40) * modenv;
-	sig = SinOsc.ar([800, 201], mod) * 0.3;
+	sig = SinOsc.ar([800, 201], mod) * amp;
 	Out.ar(out, sig);
 }).add;
 )
@@ -30,7 +30,11 @@
 
 
 
-a = Synth(\1);
+a = Synth(\2, [\modamt, 10,					//beim starten des synthies arg verändern
+				\amp, 0.5
+]);
+
+]);
 b = Synth(\2);
 c = Synth(\hallo);
 s.reboot;
