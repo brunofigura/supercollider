@@ -22,7 +22,7 @@ SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur =
 	modenv = Env.new([0, (modfreq - 1), 0], [(moddur/2), (moddur/2)], 'lin').ar(0, modtrig);
 	mod = [SinOsc.ar(modfreq - modenv),LFTri.ar(modfreq + modenv)] * modamt;				//basefreq +- env
 	env = Env.adsr(0.01, 0, 1, 3, 1).ar(2, gate);
-	sig = LeakDC.ar(SinOsc.ar(440, mod) ! 2 * env);
+	sig = LeakDC.ar(SinOsc.ar(1000, mod) ! 2 * env);
 	Out.ar(out, sig.tanh * amp);
 }).add;
 )
