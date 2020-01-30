@@ -1,12 +1,13 @@
-(SynthDef(\add, {|out, freq = 200, amp = 0.4, stretch = 0.8, gate = 1|
-	var sig, partials, env, freqmod;
+(SynthDef(\add, {|out, freq = 200, amp = 0.4, partialstretch = 0.8, gate = 1, sustain = 4|
+	var sig, partials, env, freqmod, stretch;
 
-	freqmod = Env.adsr(5, 5, stretch, 1).ar(2, gate) ;
-	partials = (2, 3 ..15);
-	partials = partials + ( partials * freqmod);
+	partialstretch = Env([0, 0.3, -0.2], sustain*[0.5, 0.5]).ar();
+
+	partials = (2, 3 ..14);
+	partials = partials + ( partials * partialstretch);
 	partials = [1, partials].flat;
 
-	env = Env.adsr(1, 0.2, 0.9, 1, 1).ar(2, gate);
+	env = Env.adsr(1, 0.2, 0.9, 1.5, 1).ar(2, gate);
 
 	sig = DynKlang.ar(`[
 		partials, //freqs
@@ -17,7 +18,15 @@
 }).add;
 )
 a = Synth(\add);
-
+(
+Pdef(\x, Pbind(
+	\instrument,\add,
+	\scale, Scale.at(\harmonicMinor),
+	\degree, Pseq([0, 2, 1, 1, 2, 0], inf),
+	\legato, 1.9,
+	\dur, 4
+)).play;
+)
 // noch erweitern
 // HALL
 // pattern
