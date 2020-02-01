@@ -6,7 +6,7 @@ fork {
 
 
 	SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur = 2, gate = 1|
-	var sig, mod, modenv, modtrig, env;												//modfreq-> freq bei der die mod startet ( er geht dann bis 																					//null und bis 2 * modfreq)
+	var sig, mod, modenv, modtrig, env;												//modfreq-> freq bei der die mod startet 		( er geht dann bis 																					//null und bis 2 * 			modfreq)
 	modtrig = Impulse.kr(1/moddur);
 	modenv = Env.new([0, (modfreq - 1), 0], [(moddur/2), (moddur/2)], 'lin').ar(0, modtrig);
 	mod = [SinOsc.ar(modfreq - modenv),LFTri.ar(modfreq + modenv)] * modamt;				//basefreq +- env
@@ -19,7 +19,7 @@ fork {
 	SynthDef(\nervotron2000, {|out = 0, amp = 0.3, modamt = 10, modfreq = 40, moddur = 5, gate = 1|
 	var sig, mod, modenv, trig, env;
 	trig = Impulse.kr(moddur);
-	modenv = Env.new([0, modamt.clip(1)], [moddur]).ar(0, trig) * 10;				//clip, damit modamt nicht zu hoch übergeben werden kann
+	modenv = Env.new([0, modamt.clip(1)], [moddur]).ar(0, trig) * 10;				//clip, damit modamt nicht zu hoch 				übergeben werden kann
 	mod = SinOsc.ar(modfreq * modenv);
 	env = Env.adsr(0.01, 0, 1, 3, 1).ar(2, gate);
 	sig = SinOsc.ar([800, 201], mod) * env;
@@ -53,11 +53,11 @@ s.sync;
 
 
 
-~starten = {
-var timeDelta, startTime, running;
-timeDelta = 0;
-running = false;
-OSCdef(\ausloeser, {|msg, time|
+	~starten = {
+	var timeDelta, startTime, running;
+	timeDelta = 0;
+	running = false;
+	OSCdef(\ausloeser, {|msg, time|
 	var thresh, amp;
 	thresh = 0.001;
 	amp = msg[3];
@@ -81,18 +81,18 @@ OSCdef(\ausloeser, {|msg, time|
 
 	};
 	[running, timeDelta, amp].postln;
-}, '/amp')
-};
+	}, '/amp')
+	};
 
 
-~stoppen = {
+	~stoppen = {
 	~synthliste.do{|item|
 		item.set(\gate, 0);
 		item.postln;
 	};
 	~synthliste.clear;
 	~synthindex = ~synthindex +1;
-}
+	}
 
 };
 
