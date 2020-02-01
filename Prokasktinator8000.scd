@@ -64,7 +64,7 @@ Ndef(\guard, {
 
 (
 var timeDelta, startTime, running;
-timeDelta = 0;
+~timeDelta = 0;
 running = false;
 OSCdef(\ausloeser, {|msg, time|
 	var thresh, amp;
@@ -72,24 +72,20 @@ OSCdef(\ausloeser, {|msg, time|
 	amp = msg[3];
 	if(amp < thresh){
 		if(running){
-			timeDelta = time - startTime;
+			~timeDelta = time - startTime;
+
 		}{
 			running = true;
 			startTime = time;
 		};
 	}{
-		timeDelta = 0;
+		~timeDelta = 0;
 		running = false;
 	};
-	if(timeDelta > 2){
-//hier kommt synthdef rein
-
-
- ~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
-
-
+	if(~timeDelta > 2){
+ 		~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
 	};
-[running, timeDelta, amp].postln;
+[running, ~timeDelta, amp].postln;
 }, '/amp')
 )
 
@@ -99,8 +95,10 @@ OSCdef(\ausloeser, {|msg, time|
 		item.set(\gate, 0);
 		item.postln;
 	};
+
 	~synthliste.clear;
 	~synthindex = ~synthindex +1;
+	~timeDelta = 0;
 }.value;
 )
 
