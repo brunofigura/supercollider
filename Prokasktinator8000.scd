@@ -72,7 +72,7 @@ OSCdef(\ausloeser, {|msg, time|
 	amp = msg[3];
 	if(amp < thresh){
 		if(running){
-			~timeDelta = time - startTime;
+		~timeDelta = time - startTime;
 
 		}{
 			running = true;
