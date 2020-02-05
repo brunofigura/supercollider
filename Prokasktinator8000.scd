@@ -1,3 +1,26 @@
+Skip to content
+Why GitHub?
+Enterprise
+Explore
+Marketplace
+Pricing
+Search
+
+Sign in
+Sign up
+brunofigura
+/
+supercollider
+100
+ Code Issues 0 Pull requests 0 Actions Projects 0 Security Insights
+Join GitHub today
+GitHub is home to over 40 million developers working together to host and review code, manage projects, and build software together.
+
+supercollider/Prokasktinator8000.scd
+@brunofigura brunofigura aufgeräumt ( problem nicht behoben)
+28f275e 3 hours ago
+120 lines (99 sloc)  2.7 KB
+
 /*
 - synthdef der ton erzeugt
 - synthdef der soundinput mic hat und analysiert wird
@@ -14,6 +37,8 @@
 ~synthindex = 0;
 ~syntharray = [\nervotron1000, \nervotron2000, \nervotron3000];
 ~synthliste = List(8);
+
+
 
 (
 SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur = 2, gate = 1|
@@ -57,36 +82,9 @@ Ndef(\guard, {
 	trig = Impulse.ar(2);
 	in = SoundIn.ar(0);
 	amp = Amplitude.kr(in, 0.01, 0.01);
-	SendReply.ar(trig, '/amp', amp);
+	SendReply.ar(trig, '/amp', amp, replyID: 57130);
 	0;
 }).play;
-)
-
-(
-var timeDelta, startTime, running;
-~timeDelta = 0;
-running = false;
-OSCdef(\ausloeser, {|msg, time|
-	var thresh, amp;
-	thresh = 0.001;
-	amp = msg[3];
-	if(amp < thresh){
-		if(running){
-			~timeDelta = time - startTime;
-
-		}{
-			running = true;
-			startTime = time;
-		};
-	}{
-		~timeDelta = 0;
-		running = false;
-	};
-	if(~timeDelta > 2){
- 		~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
-	};
-[running, ~timeDelta, amp].postln;
-}, '/amp')
 )
 
 (
@@ -98,19 +96,61 @@ OSCdef(\ausloeser, {|msg, time|
 
 	~synthliste.clear;
 	~synthindex = ~synthindex +1;
-	~timeDelta = 0;
 }.value;
 )
 
-s.queryAllNodes;
-Node
-//(CHECK)-------idee: über zeit soll bei mod, beide frequenzen in verschieden richtungen wandern
-//(CHECK)-------modenv soll loopen
-// panning der kanäle mit lfo
+
+(
+var timeDelta, startTime, running;
+timeDelta = 0;
+running = false;
+~ausloeser =
+{|msg, time|
+	var thresh, amp;
+	thresh = 0.001;
+	amp = msg[3];
+	if(amp < thresh){
+		if(running){
+			timeDelta = time - startTime;
+		}{
+			running = true;
+			startTime = time;
+		};
+	}{
+		timeDelta = 0;
+		running = false;
+	};
+	if(timeDelta > 5){
+		//hier kommt synthdef rein
 
 
-//gestartete Synth werden in Liste gepackt
-//Liste:
+		~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
 
-x.free;
+	};
+	[running, timeDelta, amp].postln;}
+)
 
+
+
+(
+var timeDelta;
+OSCdef(\ausloeser, {|msg, time|~ausloeser.value(msg, time, timeDelta);
+}, '/amp');
+)
+
+~n = NetAddr("127.0.0.1", -1);
+
+//designing sound=buch
+© 2020 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+Found 2 out of 2 items
