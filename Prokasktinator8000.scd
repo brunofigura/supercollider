@@ -59,7 +59,7 @@ Ndef(\guard, {
 	trig = Impulse.ar(2);
 	in = SoundIn.ar(0);
 	amp = Amplitude.kr(in, 0.01, 0.01);
-	SendReply.ar(trig, '/amp', amp, replyID: 57130);
+	SendReply.ar(trig, '/amp', amp);
 	0;
 }).play;
 )
@@ -103,8 +103,8 @@ running = false;
  		~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
 	};
 [running, ~timeDelta, amp].postln;
-}, '/amp')
-)
+})
+
 
 (
 {
