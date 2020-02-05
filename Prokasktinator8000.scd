@@ -15,6 +15,8 @@
 ~syntharray = [\nervotron1000, \nervotron2000, \nervotron3000];
 ~synthliste = List(8);
 
+
+
 (
 SynthDef(\nervotron3000, { |out, amp = 0.3, modamt = 10, modfreq = 200, moddur = 2, gate = 1|
 	var sig, mod, modenv, modtrig, env;												//modfreq-> freq wo der mod startet ( er geht dann bis null und 																				bis 2 * modfreq)
@@ -57,16 +59,30 @@ Ndef(\guard, {
 	trig = Impulse.ar(2);
 	in = SoundIn.ar(0);
 	amp = Amplitude.kr(in, 0.01, 0.01);
-	SendReply.ar(trig, '/amp', amp);
+	SendReply.ar(trig, '/amp', amp, replyID: 57130);
 	0;
 }).play;
 )
 
 (
+{
+	~synthliste.do{|item|
+		item.set(\gate, 0);
+		item.postln;
+	};
+
+	~synthliste.clear;
+	~synthindex = ~synthindex +1;
+}.value;
+)
+
+
+(
 var timeDelta, startTime, running;
 timeDelta = 0;
 running = false;
-OSCdef(\ausloeser, {|msg, time|
+~ausloeser =
+{|msg, time|
 	var thresh, amp;
 	thresh = 0.001;
 	amp = msg[3];
@@ -81,38 +97,24 @@ OSCdef(\ausloeser, {|msg, time|
 		timeDelta = 0;
 		running = false;
 	};
-	if(timeDelta > 2){
-//hier kommt synthdef rein
+	if(timeDelta > 5){
+		//hier kommt synthdef rein
 
 
- ~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
-
+		~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
 
 	};
-[running, timeDelta, amp].postln;
-}, '/amp')
+	[running, timeDelta, amp].postln;}
 )
+
+
 
 (
-{
-	~synthliste.do{|item|
-		item.set(\gate, 0);
-		item.postln;
-	};
-	~synthliste.clear;
-	~synthindex = ~synthindex +1;
-}.value;
+var timeDelta;
+OSCdef(\ausloeser, {|msg, time|~ausloeser.value(msg, time, timeDelta);
+}, '/amp');
 )
 
-s.queryAllNodes;
-Node
-//(CHECK)-------idee: über zeit soll bei mod, beide frequenzen in verschieden richtungen wandern
-//(CHECK)-------modenv soll loopen
-// panning der kanäle mit lfo
+~n = NetAddr("127.0.0.1", -1);
 
-
-//gestartete Synth werden in Liste gepackt
-//Liste:
-
-x.free;
-
+//designing sound=buch
