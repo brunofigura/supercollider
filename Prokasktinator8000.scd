@@ -1,26 +1,3 @@
-Skip to content
-Why GitHub?
-Enterprise
-Explore
-Marketplace
-Pricing
-Search
-
-Sign in
-Sign up
-brunofigura
-/
-supercollider
-100
- Code Issues 0 Pull requests 0 Actions Projects 0 Security Insights
-Join GitHub today
-GitHub is home to over 40 million developers working together to host and review code, manage projects, and build software together.
-
-supercollider/Prokasktinator8000.scd
-@brunofigura brunofigura aufgeräumt ( problem nicht behoben)
-28f275e 3 hours ago
-120 lines (99 sloc)  2.7 KB
-
 /*
 - synthdef der ton erzeugt
 - synthdef der soundinput mic hat und analysiert wird
@@ -102,7 +79,7 @@ Ndef(\guard, {
 
 (
 var timeDelta, startTime, running;
-timeDelta = 0;
+~timeDelta = 0;
 running = false;
 ~ausloeser =
 {|msg, time|
@@ -111,15 +88,36 @@ running = false;
 	amp = msg[3];
 	if(amp < thresh){
 		if(running){
-			timeDelta = time - startTime;
+			~timeDelta = time - startTime;
+
 		}{
 			running = true;
 			startTime = time;
 		};
 	}{
-		timeDelta = 0;
+		~timeDelta = 0;
 		running = false;
 	};
+
+	if(~timeDelta > 2){
+ 		~synthliste.add(Synth(~syntharray[~synthindex % ~syntharray.size]));
+	};
+[running, ~timeDelta, amp].postln;
+}, '/amp')
+)
+
+(
+{
+	~synthliste.do{|item|
+		item.set(\gate, 0);
+		item.postln;
+	};
+
+	~synthliste.clear;
+	~synthindex = ~synthindex +1;
+	~timeDelta = 0;
+}.value;
+
 	if(timeDelta > 5){
 		//hier kommt synthdef rein
 
@@ -128,6 +126,7 @@ running = false;
 
 	};
 	[running, timeDelta, amp].postln;}
+
 )
 
 
@@ -141,16 +140,3 @@ OSCdef(\ausloeser, {|msg, time|~ausloeser.value(msg, time, timeDelta);
 ~n = NetAddr("127.0.0.1", -1);
 
 //designing sound=buch
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Found 2 out of 2 items
