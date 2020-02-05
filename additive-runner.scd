@@ -1,3 +1,5 @@
+~vrbBus = Bus.audio(s, 2);
+
 (SynthDef(\add, {|out, freq = 200, amp = 0.4, partialstretch = 0.8, gate = 1, sustain = 4|
 	var sig, partials, env, freqmod, stretch;
 
@@ -14,10 +16,13 @@
 		1/partials, //amps
 		0//phases
 	], freq) ! 2;
+	Out.ar(~vrbBus, 2)
 	Out.ar(out, sig.tanh * env * amp)
 }).add;
 )
 a = Synth(\add);
+
+
 (
 Pdef(\x, Pbind(
 	\instrument,\add,
@@ -30,3 +35,10 @@ Pdef(\x, Pbind(
 // noch erweitern
 // HALL
 // pattern
+
+Ndef(\Hall,{
+	var sig
+	sig = In.ar(~vrbBus, 2);
+	sig = JPverb.ar(sig, )
+}.play;
+)
