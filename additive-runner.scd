@@ -29,9 +29,9 @@ Pdef(\x, Pbind(
 	\instrument,\add,
 	\scale, Scale.at(\harmonicMinor),
 	\degree, Pseq([0, 2, 1, 1, 2, 0], inf),
-	\legato, 4,
-	\dur, 8,
-	\octave, Pseq([3, 3, 3, 4, 3], inf)
+	\legato, Prand([0.1, 0.5, 1, 4], inf),
+	\dur, Prand([0.1, 0.5, 1, 4], inf),
+	\octave, Pseq([5, 5, 3, 4, 3], inf)
 )).play;
 )
 // noch erweitern
