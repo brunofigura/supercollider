@@ -68,12 +68,12 @@ k.value
 //------Synth-Baustelle-----------
 
 (
-SynthDef(\sirenebuzz, { |out, gate = 1, amp1 = 0.3, amp2 = 0.2, modfreq = 0.5, modamt = 3, dist = 1|
+SynthDef(\sirenebuzz, { |out, gate = 1, amp1 = 0.4, amp2 = 0.2, modfreq = 0.5, modamt = 3, dist = 10000|
 	var sig1, sig2, env, env2 , freqenv, trig, env2mod;
 	trig = LFPulse.ar(1/modfreq);
 	env = Env.adsr(0.4, 0, 1, 1, 1).ar(2, gate);
 	freqenv = Env([1, modamt, 1], [modfreq/2, modfreq/2]).ar(0, trig);
-	sig1 = SinOsc.ar([440, 398] * freqenv) * env;
+	sig1 = SinOsc.ar([400, 340] * freqenv) * env;
 	Out.ar(out, sig1.tanh * amp1);
 
 	env2mod = Env([3, 1, 3], [10, 10]).ar(0);
@@ -84,6 +84,18 @@ SynthDef(\sirenebuzz, { |out, gate = 1, amp1 = 0.3, amp2 = 0.2, modfreq = 0.5, m
 )
 
 a = Synth(\sirenebuzz);
-(a.set(\gate, 1,
-	\dist, 10000
-);)
+
+(
+SynthDef(\fiepen, {|out, rate = 3, density = 13|
+	var sig, trig, window, env;
+	trig = Dust.ar(density);
+	env = Env.perc(0.01, 0.2).ar(0, trig);
+	window = LFPulse.ar(rate);
+
+	sig = SinOsc.ar([8000, 8100]) * env;
+	sig = sig * window;
+
+	Out.ar(out, sig.tanh);
+}).add;
+)
+Synth(\fiepen);
