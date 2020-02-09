@@ -99,7 +99,7 @@ s.sync;
 (
 fork {
 	~synthindex = 0;
-	~syntharray = [\nervotron1000, \nervotron2000, \nervotron3000];
+	~syntharray = [\nervotron1000, \nervotron2000, \nervotron3000, \nervotron4000, \nervotron5000];
 	~synthliste = List(8);
 
 
@@ -134,6 +134,36 @@ fork {
 	sig = SinOsc.ar([1000, 999], mod) * env;
 	Out.ar(out, sig * amp);
 	}).add;
+
+
+	SynthDef(\nervotron4000, { |out, gate = 1, amp1 = 0.4, amp2 = 0.2, modfreq = 0.5, modamt = 3, dist = 10000|
+	var sig1, sig2, env, env2 , freqenv, trig, env2mod;
+	trig = LFPulse.ar(1/modfreq);
+	env = Env.adsr(0.4, 0, 1, 1, 1).ar(2, gate);
+	freqenv = Env([1, modamt, 1], [modfreq/2, modfreq/2]).ar(0, trig);
+	sig1 = SinOsc.ar([400, 340] * freqenv) * env;
+	Out.ar(out, sig1.tanh * amp1);
+
+	env2mod = Env([3, 1, 3], [10, 10]).ar(0);
+	env2 = LFPulse.ar(env2mod/modfreq);
+	sig2 = LFSaw.ar([150, 155]) * env2 * dist;
+	Out.ar(out, sig2.tanh * amp2);
+	}).add;
+
+
+
+	SynthDef(\nervorton5000, {|out, rate = 3, density = 13|
+	var sig, trig, window, env;
+	trig = Dust.ar(density);
+	env = Env.perc(0.01, 0.2).ar(0, trig);
+	window = LFPulse.ar(rate);
+
+	sig = SinOsc.ar([8000, 8100]) * env;
+	sig = sig * window;
+
+	Out.ar(out, sig.tanh);
+	}).add;
+
 
 s.sync;
 
