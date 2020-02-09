@@ -55,7 +55,7 @@ fork {
 
 
 
-	SynthDef(\nervorton5000, {|out, rate = 3, density = 13|
+	SynthDef(\nervotron5000, {|out, rate = 3, density = 13|
 	var sig, trig, window, env;
 	trig = Dust.ar(density);
 	env = Env.perc(0.01, 0.2).ar(0, trig);

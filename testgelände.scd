@@ -83,8 +83,6 @@ SynthDef(\sirenebuzz, { |out, gate = 1, amp1 = 0.4, amp2 = 0.2, modfreq = 0.5, m
 }).add;
 )
 
-a = Synth(\sirenebuzz);
-
 (
 SynthDef(\fiepen, {|out, rate = 3, density = 13|
 	var sig, trig, window, env;
@@ -99,3 +97,4 @@ SynthDef(\fiepen, {|out, rate = 3, density = 13|
 }).add;
 )
 Synth(\fiepen);
+a = Synth(\sirenebuzz);
