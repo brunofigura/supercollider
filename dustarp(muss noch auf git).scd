@@ -1,9 +1,9 @@
 ~reverb = Bus.audio(s, 2);
 ~master = Bus.audio(s, 2);
 (
-SynthDef(\crackle, {|release = 0.5, gate = 1, density = 3, amp = 0.7, freq = 220|
+SynthDef(\crackle, {|release = 0.5, gate = 1, density = 1.5, amp = 0.7, freq = 220|
 	var sig, env, trig, mod;
-	mod = SinOsc.ar(100);
+	mod = SinOsc.ar(450);
 	trig = Dust.kr([density, density-1]);
 	env = Env.perc(0.01, release).ar(0, trig);
 	sig = SinOsc.ar(freq, mod) * env;
