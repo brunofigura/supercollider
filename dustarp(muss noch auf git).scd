@@ -51,8 +51,15 @@ s.freeAll;
 
 
 (
-Ndef(\test, {
-	var sig;
-	sig = SinOsc.ar(440) * 0.3 * LFPulse.ar(2);
-	sig = FreeVerb.ar(sig, 1);
+Ndef(\distantwhisper, {
+	var sig,sig2,sig3, env, trig;
+	trig = LFPulse.ar(1);
+	env = Env.perc(0, 0.5, 1).ar(0, trig);
+	sig = SinOsc.ar(440) * 0.3;
+	sig = sig * env;
+	sig = FreeVerb.ar([sig, sig], 1);
+	sig2 = DelayC.ar(sig, 0.3);
+	sig2 = sig2 * 0.6;
+	sig3 = sig +sig2;
 }).play;)
+// signal vielleicht mono machen und dann mit lfo panen
