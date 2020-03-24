@@ -17,8 +17,9 @@
 		0//phases
 	], freq) ! 2;
 	sig = sig.tanh * env * amp;
-	Out.ar(~vrbBus, sig);
-	Out.ar(out, sig);
+	Out.ar(~vrbBus, sig * 0.3
+	);
+	Out.ar(out, sig * 0.4);
 }).add;
 )
 a = Synth(\add);
@@ -30,8 +31,8 @@ Pdef(\x, Pbind(
 	\scale, Scale.at(\harmonicMinor),
 	\degree, Pseq([0, 2, 1, 1, 2, 0], inf),
 	\legato, Prand([0.1, 0.5, 1, 4], inf),
-	\dur, Prand([0.1, 0.5, 1, 4], inf),
-	\octave, Pseq([5, 5, 3, 4, 3], inf)
+	\dur, Pseq([0.6, 0.6, 0.6, 0.4], inf),
+	\octave, Pseq([4, 4, 5, 4, 5], inf)
 )).play;
 )
 // noch erweitern
@@ -41,6 +42,6 @@ Pdef(\x, Pbind(
 Ndef(\Hall,{
 	var sig;
 	sig = In.ar(~vrbBus, 2);
-	sig = FreeVerb.ar(sig, 1, 0.4, 0.9);
+	sig = FreeVerb.ar(sig, 1, 0.9, 0);
 }
 ).play;)
