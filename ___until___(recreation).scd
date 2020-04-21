@@ -46,3 +46,9 @@ Ndef(\pattern2, {|freq = 453.47,  dur = 1, amp= 0.2|
 )
 
 //-------2.IDEE: Patterns
+
+.do
+//-----3.IDEE: 1 Arrays, dass von einem anderen nach und nach ersetzt wird
+//.put
+
+
