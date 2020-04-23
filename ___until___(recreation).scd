@@ -74,5 +74,5 @@ r = Task({
 });
 )
 r.play;
-// das sollte gehen
+// warum wird bei den letzten 3 "do's" das Array g nicht erweitert
 
