@@ -1,3 +1,71 @@
+
+
+
+
+
+
+(
+Ndef(\pattern1, {|freq1 = 440, dur = 1, amp= 0.2, array = [0, 1]|
+	var sig, env, trig, step;
+
+	trig = LFPulse.ar(dur);
+
+	step = TChoose.kr(trig, (array * freq1));
+	env = Env.perc(0.01, (dur/2), 1, -4.0).ar(0, trig);
+	sig = SinOsc.ar(step) * env;
+	sig = sig ! 2 * amp;
+}).play
+)
+
+
+
+
+
+(
+	Tdef(\arranger, {
+	var step;
+
+	step = [1, 2, (3/2), (4/3), (5/4), (6/5), (7/6), (8/7), (9/8)];
+
+	Ndef(\pattern1).set(\array, step).play;
+
+	}).play;
+)
+
+
+/*
+	Frage : wie kann ich dem Ndef ein Array als argument übergeben
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //-------1.IDEE: alle Ndefs spielen gleichzeitig und ein Ndef übernimmt das "arrangment"
 
 //NDEF mischer
@@ -9,22 +77,23 @@ o = [1 ,1 ,1 ,1 ,1 , 2, 2, 2, 2,  4,1, 1 ];
 //sinuston
 
 (
-Ndef(\Bordun1, {|freq = 440, amp = 0.05|
+Ndef(\test, {|freq = 440, amp = 0.05|
 	SinOsc.ar(freq) ! 2 * amp }).play;)
 
 
 (
-Ndef(\pattern1, {|freq = 440, dur = 1, amp= 0.2|
-	var sig, env, trig,trig1, step, octave;
+Ndef(\patterna, {|freq1 = 440, dur = 1, amp= 0.2|
+	var sig, env, trig, trig1, step, array;
+
+	array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 	trig = LFPulse.ar(dur);
 	trig1 = LFPulse.ar(dur/4);
-	octave = TChoose.kr(trig1, o);
-	step = TChoose.kr(trig, s);
+	step = TChoose.kr(trig, (array * freq1));
 	env = Env.perc(0.01, (dur/2), 1, -4.0).ar(0, trig);
-	sig = SinOsc.ar(freq * step * octave) * env;
+	sig = SinOsc.ar(step) * env;
 	sig = sig ! 2 * amp;
-}).play;
+})
 )
 
 (
@@ -33,7 +102,7 @@ Ndef(\Bordun2, {|freq = 453.47, amp = 0.05|
 
 
 (
-Ndef(\pattern2, {|freq = 453.47,  dur = 1, amp= 0.2|
+Ndef(\patternb, {|freq = 453.47,  dur = 1, amp= 0.2|
 	var sig, env, trig, step;
 
 	trig = LFPulse.ar(dur);
@@ -45,9 +114,23 @@ Ndef(\pattern2, {|freq = 453.47,  dur = 1, amp= 0.2|
 
 )
 
+// _____________________ Tdef arranger ____________________
+(
+	Tdef(\arranger, {
+	var a1;
+
+	a1 = [1, 2, (3/2), (4/3), (5/4), (6/5), (7/6), (8/7), (9/8)];
+
+	Ndef(\pattern1).set(\array, a1).play;
+
+	}).play;
+)
+
+
+
 //-------2.IDEE: Patterns
 
-.do
+
 
 
 
@@ -56,6 +139,10 @@ Ndef(\pattern2, {|freq = 453.47,  dur = 1, amp= 0.2|
 //.put
 
 
+(
+Ndef(\was, {|freq = 440, amp = 0.05|
+	SinOsc.ar(freq) * amp }).play;
+)
 
 
 
@@ -75,4 +162,3 @@ r = Task({
 )
 r.play;
 // warum wird bei den letzten 3 "do's" das Array g nicht erweitert
-
