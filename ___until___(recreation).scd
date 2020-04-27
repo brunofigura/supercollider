@@ -22,7 +22,7 @@ Ndef(\pattern1, {|freq1 = 440, dur = 1, amp= 0.2, array = [0, 1]|
 
 
 (
-	Tdef(\arranger, {
+	Tdef(\arranger1, {
 	var step;
 
 	step = [1, 2, (3/2), (4/3), (5/4), (6/5), (7/6), (8/7), (9/8)];
@@ -41,27 +41,53 @@ Ndef(\pattern1, {|freq1 = 440, dur = 1, amp= 0.2, array = [0, 1]|
 
 
 
+// Versuch: kein Arry wird übergeben sondern die Grundfreqenz
+
+(
+Ndef(\pattern1, {|freq = 440, dur = 1, amp= 0.2|
+	var sig, env, trig, step, array;
+
+	array = [1, 2, (3/2), (4/3), (5/4), (6/5), (7/6), (8/7), (9/8)];
+
+	trig = LFPulse.ar(dur);
+
+	step = TChoose.kr(trig, (array * freq));
+	env = Env.perc(0.02, (dur/2), 1, -4.0).ar(0, trig);
+	sig = SinOsc.ar(step) * env;
+	sig = sig ! 2 * amp;
+});
+)
+(
+Ndef(\Bordun, {|freq = 440, amp = 0.05|
+	SinOsc.ar(freq) ! 2 * amp });
+)
 
 
 
 
+(
+	Tdef(\arranger2, {
+	var freq1, freq2;
 
+	freq1 = 440;
+	freq2 = 452;
 
+	loop{
+	Ndef(\pattern1).set(\freq, freq1).play;
 
+	4.rand.wait;
 
+	Ndef(\pattern1).set(\freq, freq2).play;
 
+	4.rand.postln.wait;
+	};
 
+}).play;
+)
 
+Ndef(\Bordun).set(\freq, 440).play;
 
-
-
-
-
-
-
-
-
-
+Ndef(\Bordun).set(\freq, 452).play;
 
 
 
@@ -98,7 +124,9 @@ Ndef(\patterna, {|freq1 = 440, dur = 1, amp= 0.2|
 
 (
 Ndef(\Bordun2, {|freq = 453.47, amp = 0.05|
-	SinOsc.ar(freq) ! 2 * amp }).play;)
+	SinOsc.ar(freq) ! 2 * amp }).play;
+
+)
 
 
 (
