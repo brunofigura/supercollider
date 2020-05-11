@@ -18,10 +18,10 @@ Synth(\rec, [\buf, a]);
 
 //busse um die gefilterten Signale hin und her zu schicken
 (
-w = Bus.audio(s, 2);
-x = Bus.audio(s, 2);
-y= Bus.audio(s, 2);
-z = Bus.audio(s, 2);
+w = Bus.alloc();
+x = Bus.alloc();
+y= Bus.alloc();
+z = Bus.audio();
 )
 //--------------2.SynthDef ausführen----------
 
