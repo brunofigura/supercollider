@@ -45,7 +45,7 @@ SynthDef(\play, {arg out;
 	//Out.ar(out, sig ! 2)
 }).add;)
 
-//----------3. Ndef asuführen: VORSICHT SEHR LAUT UND SCHRILL!!!!!!
+//----------3. Ndef asuführen:
 
 (
 Ndef(\1, {
@@ -61,10 +61,10 @@ Ndef(\1, {
 	freq3 = Pitch.kr(in3, 3000, 2600, 3200);
 	freq4 = Pitch.kr(in4, 4500, 3600, 5000);
 
-	sig1 = SinOsc.ar(freq1) * Amplitude.ar(in1);
-	sig2 = SinOsc.ar(freq2) * Amplitude.ar(in2);
-	sig3 = SinOsc.ar(freq3) * Amplitude.ar(in3);
-	sig4 = SinOsc.ar(freq4) * Amplitude.ar(in4);
+	sig1 = SinOsc.ar(freq1) * Amplitude.ar(in1) * 1.5;
+	sig2 = SinOsc.ar(freq2) * Amplitude.ar(in2) * 1.5;
+	sig3 = SinOsc.ar(freq3) * Amplitude.ar(in3) * 1.5;
+	sig4 = SinOsc.ar(freq4) * Amplitude.ar(in4) * 1.5;
 
 	sig = Splay.ar([sig1, sig2, sig3, sig4], 2)
 }).play;
@@ -73,3 +73,97 @@ Ndef(\1, {
 //--------------4. Synthdef ( Buffer ) abspielen
 
 Synth(\play);
+
+
+
+
+
+// aufnahme
+
+a = Buffer.alloc(s, 5 * s.sampleRate, 1);
+
+(
+SynthDef(\rec, {|buf|
+	var in;
+	in = SoundIn.ar(0);
+	RecordBuf.ar(in, buf, loop: 0, doneAction: Done.freeSelf);
+}).add;
+)
+
+Synth(\rec, [\buf, a]);
+
+
+
+(
+Ndef(\play, {
+	PlayBuf.ar(1, a, loop:1);
+});
+
+// bandfilter
+Ndef(\bandpass, {
+	var in = Ndef.ar(\play);
+	var freqs = [800, 1900, 3000, 4500];
+	BPF.ar(in, freqs, 0.1);
+});
+
+// resynthese
+Ndef(\resynthese, {
+	var signals, bands;
+	var freqs = [800, 1900, 3000, 4500];
+	var pitches;
+	bands = Ndef.ar(\bandpass);
+	signals = bands.collect { |signal, i|
+		var p, freq, foundFreq, hasFound, amp;
+		freq = freqs[i];
+		p = Pitch.kr(signal, initFreq: freq, minFreq: freq * 0.6, maxFreq: freq * 1.4);
+		foundFreq = p[0];
+		hasFound = p[1];
+		amp = Amplitude.ar(signal);
+		SinOsc.ar(foundFreq) * amp * hasFound.lag(0.01)
+	};
+	Splay.ar(signals)
+}).play
+)
+
+
+
+// alternativ:
+
+
+(
+Ndef(\play, {
+	PlayBuf.ar(1, a, loop:1);
+});
+
+// bandfilter
+Ndef(\bandpass, {
+	var in = Ndef.ar(\play);
+	var freqs = [800, 1900, 3000, 4500];
+	BPF.ar(in, freqs, 0.1);
+});
+
+// analyse: kanäle sind abwechselnd: freq, amp, freq, amp
+Ndef(\pitchanalyse, {
+	var freqs = [800, 1900, 3000, 4500];
+	var bands = Ndef.ar(\bandpass);
+	var output = List.new;
+	bands.collect { |signal, i|
+		var freq = freqs[i];
+		var p = Pitch.kr(signal, initFreq: freq, minFreq: freq * 0.6, maxFreq: freq * 1.4);
+		var foundFreq = p[0];
+		var hasFreq = p[1].lag(0.01);
+		var amp = Amplitude.kr(signal);
+		[foundFreq, hasFreq * amp]
+	}.flatten(1);
+});
+
+
+Ndef(\resynthese, {
+	var freqs, amps, pitchData;
+	pitchData = Ndef.ar(\pitchanalyse).clump(2); // wieder zurück ins format [[freq, hasFreq], ...]
+	pitchData = pitchData.flop; // dann ins format [[freqs..], [hasFreqs...]]
+	freqs = pitchData.at(0);
+	amps = pitchData.at(1);
+	SinOsc.ar(freqs) * amps * 20
+}).play;
+)
