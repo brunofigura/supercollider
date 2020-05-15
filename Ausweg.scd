@@ -7,7 +7,8 @@ SpearFile2.verbose = true;
 ~file = SpearFile2("/spear data/Analysed-Fieldrecording.txt".resolveRelative, s);
 
 a= ~file.initPartials;
-a = a.partials.select { |x| x.any { |pair| pair[1] > 0.05 } }
+f = a.partials.flatten.select {  arg item, i ; item[1] > 0.05  }; // Der code funktioniert nicht wie er sollte
+a.shape;
 // ich habe ein Problem damit Pärchen mit zu leise Amplitude aus der Liste zu packen
 
 
@@ -20,13 +21,13 @@ a = a.partials.select { |x| x.any { |pair| pair[1] > 0.05 } }
 	var list, initindex, lastindex, currindex, step, i=0;
 	list = List.new(wdh);
 
-	b = a.flatten;
+	b = a.partials.flatten.select {  arg item, i ; item[1] > 0.06  };
 
 	c = b.flop[0];
 
 	lastindex = c.size - 1 ;
 	initindex = rand(lastindex);
-	step = rrand(50, wdh);      // Auswahl könnte du eng sein
+	step = rrand(25, wdh);      // Auswahl könnte du eng sein
 	currindex = initindex;
 
 		while ({(currindex + step.value < lastindex)&&(i <wdh)},{
@@ -44,23 +45,24 @@ a = a.partials.select { |x| x.any { |pair| pair[1] > 0.05 } }
 	list.flop;
 }
 )
-~partialselect.(100).flop;
+~partialselect.(100);
 
 //VORSICHT  LAUT UND SCHRILL
 
 (
-Ndef(\sinebank, {|teiltöne = 10, ampoffset = 0|
+Ndef(\sinebank, {|teiltöne = 100 ,filterfreq = 50, ampoffset = 2|
 	var sig, pairs, amps, freqs;
-	pairs = ~partialselect.(200);
+	pairs = ~partialselect.(20);
 	freqs = pairs.flop[0];
 	amps = pairs.flop[1];
 
 	sig = SinOsc.ar(freqs) * (amps + ampoffset);
 	sig = LeakDC.ar(sig);
-	sig = Splay.ar(sig, 1);
-	sig = FreeVerb.ar(sig, 0.6, 1, 0.3);
-	sig = LeakDC.ar(sig);
-	sig;
+	sig = HPF.ar(sig, filterfreq);
+	sig = Splay.ar(sig, 2);
+	//sig = FreeVerb.ar(sig, 0.6, 1, 0.3);
+	//sig = LeakDC.ar(sig);
+	sig.tanh;
 }).play;
 )
 
