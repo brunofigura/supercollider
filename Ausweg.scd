@@ -4,24 +4,23 @@
 
 
 SpearFile2.verbose = true;
-~file = SpearFile2("/spear data/Analysed-Fieldrecording.txt".resolveRelative, s);
+~file1 = SpearFile2("/spear data/Analysed-Fieldrecording.txt".resolveRelative, s);
+~file2 = SpearFile2("/spear data/trump1.txt".resolveRelative, s); // wird falsch eingelesen
+~file3 = SpearFile2("/spear data/trump-Press-are-liars(loud).txt".resolveRelative, s);
 
-a= ~file.initPartials;
-f = a.partials.flatten.select {  arg item, i ; item[1] > 0.05  }; // Der code funktioniert nicht wie er sollte
-a.shape;
-// ich habe ein Problem damit Pärchen mit zu leise Amplitude aus der Liste zu packen
+~file1= ~file1.initPartials;
+~file2= ~file2.initPartials;
+~file3= ~file3.initPartials;
 
-
-
-
+a = ~file3.partials.flatten.sort {|a, b| a[1] <= b[1]; }
 
 // Funktion für Auswahl n bestimmte Partials
 (
-~partialselect = {|wdh = 10|
+~partialselect = {|wdh = 10, array|
 	var list, initindex, lastindex, currindex, step, i=0;
 	list = List.new(wdh);
 
-	b = a.partials.flatten.select {  arg item, i ; item[1] > 0.06  };
+	b = array.partials.flatten.select {  arg item, i ; item[1] > 0.06  };
 
 	c = b.flop[0];
 
@@ -42,17 +41,17 @@ a.shape;
 			list.add(b.[currindex]);
 		});
 
-	list.flop;
+	list.postln.flop;
 }
 )
-~partialselect.(100);
+~partialselect.(100, ~file3);
 
 //VORSICHT  LAUT UND SCHRILL
 
 (
 Ndef(\sinebank, {|teiltöne = 100 ,filterfreq = 50, ampoffset = 2|
 	var sig, pairs, amps, freqs;
-	pairs = ~partialselect.(20);
+	pairs = ~partialselect.(20, ~file1);
 	freqs = pairs.flop[0];
 	amps = pairs.flop[1];
 
