@@ -49,9 +49,9 @@ a = ~file3.partials.flatten.sort {|a, b| a[1] <= b[1]; }
 //VORSICHT  LAUT UND SCHRILL
 
 (
-Ndef(\sinebank, {|teiltöne = 100 ,filterfreq = 50, ampoffset = 2|
+SynthDef(\sinebank, {|out,teiltöne = 100 ,filterfreq = 50, ampoffset = 2|
 	var sig, pairs, amps, freqs;
-	pairs = ~partialselect.(20, ~file1);
+	pairs = ~partialselect.(teiltöne, ~file1); // wieso geht das nicht
 	freqs = pairs.flop[0];
 	amps = pairs.flop[1];
 
@@ -62,10 +62,11 @@ Ndef(\sinebank, {|teiltöne = 100 ,filterfreq = 50, ampoffset = 2|
 	//sig = FreeVerb.ar(sig, 0.6, 1, 0.3);
 	//sig = LeakDC.ar(sig);
 	sig.tanh;
-}).play;
+	Out.ar(out, sig);
+}).add;
 )
 
-
+g = Synth(\sinebank).set([\teiltöne, 100]); // das will ich machen können
 
 
 (
