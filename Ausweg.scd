@@ -12,6 +12,33 @@ SpearFile2.verbose = true;
 ~file2= ~file2.initPartials;
 ~file3= ~file3.initPartials;
 
+~file3.partials.flatten.flop // alle Partials hintereinander gereiht
+(189*119)
+// Ndef soll init partials Datei bekommen und alle Partials enen nacheinander ( von oben nach unten ) abspielen
+Ndef(\partialPrinter, {
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 a = ~file3.partials.flatten.sort {|a, b| a[1] <= b[1]; }
 
 // Funktion für Auswahl n bestimmte Partials
