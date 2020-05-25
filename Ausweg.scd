@@ -26,7 +26,7 @@ SpearFile2.verbose = true;
 
 SynthDef(\band, {|out, dt = 0.01|
 	var sig, envamp,envfreqs,freqs,amps, trig;
-	amps = ~file3.partials.flatten.flop.at(1);
+	amps = ~file3.partials.flatten.flop.at(1); // hier liegt das problem, jeder erzeugte Synth darf nur ein PArtal abspielen. Es müssen mehr synths erzeugt werden.
 	freqs = ~file3.partials.flatten.flop.at(0);
 	envamp = EnvGen.ar(Env(amps,[dt], \sine));
 	envfreqs = EnvGen.ar(Env(freqs,[dt], \sine), doneAction: 2);
@@ -37,10 +37,26 @@ SynthDef(\band, {|out, dt = 0.01|
 )
 Synth(\band);
 
+(
+var maxFrames = 512;
+SynthDef(\band, {|out, dt = 0.01, amp |
+	var sig, envamp,envfreqs,freqs,amps, trig;
+	amps = \freqs.ir(440 ! maxFrames); // hier liegt das problem, jeder erzeugte Synth darf nur ein PArtal abspielen. Es müssen mehr synths erzeugt werden.
+	freqs = \amps.ir(440 ! maxFrames);
+	envamp = EnvGen.ar(Env(amps,[dt], \sine));
+	envfreqs = EnvGen.ar(Env(freqs,[dt], \sine), doneAction: 2);
 
-().play;''
+	sig = SinOsc.ar(envfreqs) * envamp * amp; // GUCK DAS ORDENTLICHE AMP GEWÄHLT IST
+	Out.ar(out, sig ! 2);
+}).add;
+)
 
+(
+var maxAmp = ~file3.partials.collect { |y| y.collect { |x| x.at(1) } }.flat.maxItem;
+var amp = amp/maxAmp;
+p = ~file3.partials
 
+)
 
 
 
