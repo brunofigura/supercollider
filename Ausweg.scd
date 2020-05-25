@@ -15,19 +15,30 @@ SpearFile2.verbose = true;
 ~file3.partials.flatten.flop // alle Partials hintereinander gereiht
 (189*119)
 // Ndef soll init partials Datei bekommen und alle Partials enen nacheinander ( von oben nach unten ) abspielen
-Ndef(\partialPrinter, {
-
-});
 
 
 
 
+~file3.partials.flatten.flop.shape
 
 
+(
+
+SynthDef(\band, {|out, dt = 0.01|
+	var sig, envamp,envfreqs,freqs,amps, trig;
+	amps = ~file3.partials.flatten.flop.at(1);
+	freqs = ~file3.partials.flatten.flop.at(0);
+	envamp = EnvGen.ar(Env(amps,[dt], \sine));
+	envfreqs = EnvGen.ar(Env(freqs,[dt], \sine), doneAction: 2);
+
+	sig = SinOsc.ar(envfreqs) * envamp * 0.001;
+	Out.ar(out, sig ! 2);
+}).add;
+)
+Synth(\band);
 
 
-
-
+().play;''
 
 
 
