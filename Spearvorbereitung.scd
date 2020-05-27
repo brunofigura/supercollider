@@ -24,4 +24,12 @@ Synth(\x, [
 )
 
 
-// mit .do mehrere Synths erzeugen
+
+
+(
+b = {Synth(\x,[\freqs, {exprand(220, 990)}! 16])} ! 16;
+)
+
+(
+b.do {|x| x.release(5)};
+)
