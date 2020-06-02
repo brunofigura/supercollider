@@ -1,5 +1,5 @@
 (
-SynthDef(\x, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detunespeed = 0, detunephase = 0|		//detune um später stauchen und strecken zu können ( vielleicht muss die methode geändert werden)
+SynthDef(\x, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detunespeed = 0, detunephase = 0, trig = 0|		//detune um später stauchen und strecken zu können ( vielleicht muss die methode geändert werden)
 	var freqs = \freqs.ir(440 ! 16); //man kann dem synth ein16 großes array mit freqs als arg übergeben
 	var amps = \amps.ir(1 ! 16); // zum test wird das erstmal nicht benutzt
 
@@ -8,6 +8,8 @@ SynthDef(\x, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detu
 	var env = EnvGen.kr(Env.asr, gate,doneAction: 2);
 	var envfreq = EnvGen.ar(Env(freqs, dt ! freqs.size, curve: \sin).circle(dt));
 	var envamp = EnvGen.ar(Env(amps, dt ! freqs.size).circle(dt));
+
+	var strecker = EnvGen.ar(Env.perc(1, 1, 100, curve: \sin), trig);
 
 	var sig = SinOsc.ar(envfreq + mod) * envamp * env;
 		sig = sig * amp;
@@ -56,6 +58,45 @@ b.do {|x, i| x.set(\detuneamt, amt.at(i),
 }
 )
 
+
 (
 b.do {|x| x.release(5)};
+)
+
+(
+SynthDef(\y, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detunetime = 2, trig = 0|		//detune um später stauchen und strecken zu können ( vielleicht muss die methode geändert werden)
+	var freqs = \freqs.ir(440 ! 16); //man kann dem synth ein16 großes array mit freqs als arg übergeben
+	var amps = \amps.ir(1 ! 16); // zum test wird das erstmal nicht benutzt
+
+	var mod = EnvGen.ar(Env.perc(detunetime/2, detunetime/2, detuneamt, \sin), trig);// mod stacht und streckt fq
+
+	var env = EnvGen.kr(Env.asr, gate,doneAction: 2);
+	var envfreq = EnvGen.ar(Env(freqs, dt ! freqs.size, curve: \sin).circle(dt));
+	var envamp = EnvGen.ar(Env(amps, dt ! freqs.size).circle(dt));
+
+
+	var sig = SinOsc.ar(envfreq + mod) * envamp * env;
+		sig = sig * amp;
+
+		sig = FreeVerb2.ar(sig, sig, room: 0.7, damp: 0);
+
+		Out.ar(out,Pan2.ar(sig, pan));
+}).add;
+)
+
+(
+c = {Synth(\y,[\freqs, 300 ! 16, \amp, 0.1])} ! 8;
+)
+(
+c = {Synth(\y,[\freqs, {exprand(220, 990)}! 16])} ! 16;
+)
+
+(
+var polarity = [-1, -1, -1, -1, 1, 1, 1, 1]; // muss so groß sein synths ereugt werden
+c.do{|x, i| x.set(\detuneamt, 200 * polarity[i], \trig, 1, \detunetime, 5)};
+)
+c.do{|x| x.set(\detuneamt, 100, \trig, 0)};
+
+(
+c.do {|x| x.release(5)};
 )
