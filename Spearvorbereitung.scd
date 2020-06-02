@@ -6,7 +6,7 @@ SynthDef(\x, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detu
 	var mod = SinOsc.ar(detunespeed,phase: detunephase , mul: detuneamt);
 
 	var env = EnvGen.kr(Env.asr, gate,doneAction: 2);
-	var envfreq = EnvGen.ar(Env(freqs, dt ! freqs.size, curve: \sin).circle(dt)).poll;
+	var envfreq = EnvGen.ar(Env(freqs, dt ! freqs.size, curve: \sin).circle(dt));
 	var envamp = EnvGen.ar(Env(amps, dt ! freqs.size).circle(dt));
 
 	var sig = SinOsc.ar(envfreq + mod) * envamp * env;
@@ -40,20 +40,21 @@ b.do {|x| x.release(5)};
 
 //jede synthinstanz soll eine unterschidliche random detune bewegung haben
 (
-b = {Synth(\x,[\freqs, 300 ! 16] )} ! 8;
+b = {Synth(\x,[\freqs, 300 ! 16, \amp, 0.01])} ! 7;
 )
 
-(
-b.do {|x| x.set(\detune, 55)} // kann ich hier auch Ugens reinschreiben?
-)
-({rand(5, 19)} ! 6).postln.at(0) // das geht, aber das dadrunter nicht
-(
-b.do {|x| x.set(\detuneamt, ({rand(0.0, 120.0)} ! 8).at(x),    // ich würde gerne für jeden synth andere detune Werte ( am liebsten zufällig bestimmt)
-				\detunephase, ({rand(0.0, 2.0)} ! 8).at(x),
-				\detunespeed, ({rand(0.0, 3.0)} ! 8).at(x),
-)}
-)
 
+(
+var size = b.size;
+
+var amt = {rrand(0.0, 15)} ! size;
+var phase = {rrand(0.0, 2.0)} ! size;
+var speed ={rrand(0.0, 1.0)} ! size;
+b.do {|x, i| x.set(\detuneamt, amt.at(i),
+					\detunephase, phase.at(i),
+					\detunespeed, speed.at(i))
+}
+)
 
 (
 b.do {|x| x.release(5)};
