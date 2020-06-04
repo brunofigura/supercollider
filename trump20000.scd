@@ -1,5 +1,9 @@
 
 ~file3 = SpearFile2("B:/supercolider-git/supercollider/spear data/Trump-Press-are-liars(loud).txt", s); // windows
+~file3 = SpearFile2("B:/supercolider-git/supercollider/spear data/fieldrec(eq+c).txt", s) // ist sehr leise einfach so.
+
+// amp abhängig vom array werden machen!!!!!!!!!!! sowas wie maxamp
+
 //Spearvorbereitung jetzt mit spear
 ~file3 = SpearFile2("/Users/brunofigura/GitHub/supercollider/spear data/Trump-Press-are-liars(loud).txt".resolveRelative, s);
 
@@ -45,7 +49,7 @@ b = a.partials.collect{|x, i|
 }
 )
 
-b.do {|x| x.set(\dt, 0.001, \pan, 0.01)}; // passiert zu direkt
+b.do {|x| x.set(\dt, 0.0001, \pan, 0.01)}; // passiert zu direkt
 (
 var polarity = ((-1 ! (b.size/2))++(1 ! (b.size/2))).asArray; // muss so groß sein wie synths ereugt werden
 b.do{|x, i| x.set(\detuneamt, 200* i * polarity[i], \trig, 1, \detunetime, 1)};

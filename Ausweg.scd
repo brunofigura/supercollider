@@ -1,7 +1,7 @@
 
 
 ~fieldrec1 = Buffer.read(s,"/export/STE-006.wav".resolveRelative);
-
+~fieldrec1.play;
 
 SpearFile2.verbose = true;
 ~file1 = SpearFile2("/spear data/Analysed-Fieldrecording.txt".resolveRelative, s);
