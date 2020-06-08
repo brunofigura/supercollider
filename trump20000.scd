@@ -14,7 +14,7 @@ a.partials[5].flop[0].size // ein partial hat 119 frequenzen
 
 
 (
-SynthDef(\y, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detunetime = 2, trig = 0|		//detune um später stauchen und strecken zu können ( vielleicht muss die methode geändert werden)
+SynthDef(\y, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detunetime = 2, trig = 0, maxamp = 1|		//detune um später stauchen und strecken zu können ( vielleicht muss die methode geändert werden)
 	var freqs = \freqs.ir(440 ! 119); //man kann dem synth ein16 großes array mit freqs als arg übergeben
 	var amps = \amps.ir(1 ! 119);
 
@@ -26,26 +26,42 @@ SynthDef(\y, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detu
 
 
 	var sig = SinOsc.ar(envfreq + mod) * envamp * env;
-		sig = sig * amp;
+		sig = sig * (amp/maxamp);
 
 		//sig = FreeVerb.ar(sig);
 
 		Out.ar(out,Pan2.ar(sig, SinOsc.ar(pan, mul: 0.4)));
 }).add;
 )
+(
+~playAll = { // name des syntharrays, file die benutzt wird, synthdef der benutzt wird
+	a = \name.ir();
+	a.partials.size.post;
+( " Partials werden gespielt\n\n").post;
+\name.ir = a.partials.collect{|x, i|
+	var partial = a.partials[i].flop;
+	var maxamp = a.partials.collect { |y| y.collect { |x| x.at(1) } }.flat.maxItem;
+	Synth(\synth.ir, [\freqs, partial[0], \amps, partial[1], \pan, 1, \maxamp, maxamp]);
+}
+};
+)
+~playAll(b, ~file3, \y);
 
 (
 p = a.partials[5].flop; // 5. Partial wird abgespielt
-
+p = a.partials[].flop; // was passiert dann
+var maxAmp = a.partials.collect { |y| y.collect { |x| x.at(1) } }.flat.maxItem; // max amp von file 3 0.726028
 b = Synth(\y, [\freqs, p[0], \amps, p[1]]);
 )
 
 //alle partials absipielen
 (
-a.partials.size; // diese Datei hat 189 parials
+a.partials.size.post;
+( " Partials werden gespielt\n\n").post;
 b = a.partials.collect{|x, i|
 	var partial = a.partials[i].flop;
-	Synth(\y, [\freqs, partial[0], \amps, partial[1], \pan, 1]);
+	var maxamp = a.partials.collect { |y| y.collect { |x| x.at(1) } }.flat.maxItem;
+	Synth(\y, [\freqs, partial[0], \amps, partial[1], \pan, 1, \maxamp, maxamp]);
 }
 )
 
