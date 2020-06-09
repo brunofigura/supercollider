@@ -58,23 +58,36 @@ a.partials.size.post;
 
 
 
+
+
 (
-var etwas = ~playAll.value(~file3);
-var jenes = ~playAll.value(~file2);
-~stopAll.value(etwas);
-~stopAll.value(jenes);
+~stretchAll = {|syntharray|
+var polarity = ((-1 ! (b.size/2))++(1 ! ((b.size/2)+1))).asArray;
+
+syntharray.do{|x, i| x.set(\detuneamt, 200, \trig, 0, \detunetime, 5)};
+syntharray.do{|x, i| x.set(\detuneamt, (200* i) * polarity , \trig, 1, \detunetime, 1)};
+}
 )
 
 
+(
+var etwas = ~playAll.value(~file3);
+//var jenes = ~playAll.value(~file2);
+~stretchAll.value(etwas);
+//~stopAll.value(jenes);
+)
 
-
-
-
-
-
-
-
-
+(
+Tdef(\test, {
+	1.do {
+		var etwas = ~playAll.value(~file3);
+		etwas.postln;
+		2.wait;
+		~stretchAll.value(etwas);
+		10.wait;
+		~stopAll.value(etwas);
+};}
+).play;)
 
 (
 p = a.partials[5].flop; // 5. Partial wird abgespielt
@@ -96,8 +109,10 @@ b = a.partials.collect{|x, i|
 
 b.do {|x| x.set(\dt, 0.0001, \pan, 0.01)}; // passiert zu direkt
 (
-var polarity = ((-1 ! (b.size/2))++(1 ! (b.size/2))).asArray; // muss so groß sein wie synths ereugt werden
-b.do{|x, i| x.set(\detuneamt, 200* i * polarity[i], \trig, 1, \detunetime, 1)};
+var polarity = ((-1 ! (b.size/2))++(1 ! ((b.size/2)+1))).asArray; // muss so groß sein wie synths ereugt werden
+b.size.postln;
+b.do{|x, i| x.set(\detuneamt, 200, \trig, 0, \detunetime, 5)};
+b.do{|x, i| x.set(\detuneamt, 200 * i * polarity[i], \trig, 1, \detunetime, 1)};
 )
 
 b.do{|x, i| x.set(\detuneamt, 200, \trig, 0, \detunetime, 5)};
