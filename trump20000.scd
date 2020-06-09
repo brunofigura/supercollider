@@ -35,11 +35,12 @@ SynthDef(\y, {|out, gate = 1, amp = 0.05, dt = 0.1, pan = 0, detuneamt = 0, detu
 )
 
 (
-~playAll = {|file| // file geht, wieso geht nicht name
+
+~playAll = {|file|
 a = file;
 a.partials.size.post;
 ( " Partials werden gespielt\n\n").post;
-	g = a.partials.collect{|x, i|
+	b = a.partials.collect{|x, i| // in Liste speichern
 	var partial = a.partials[i].flop;
 	var maxamp = a.partials.collect { |y| y.collect { |x| x.at(1) } }.flat.maxItem;
 	Synth(\y, [\freqs, partial[0], \amps, partial[1], \pan, 1, \maxamp, maxamp]);
@@ -49,10 +50,19 @@ a.partials.size.post;
 )
 
 ~stopAll = {|name|name.do {|x| x.release(5)};}
+// funktion für partial scan
+//funktion für random partial scan
+//organisches weißes rauschen ( alla meer )
 
-~playAll.value(~file2);
-~stopAll.value(g);
 
+
+
+(
+var etwas = ~playAll.value(~file3);
+var jenes = ~playAll.value(~file2);
+~stopAll.value(etwas);
+~stopAll.value(jenes);
+)
 
 
 
