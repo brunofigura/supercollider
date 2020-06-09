@@ -53,6 +53,7 @@ a.partials.size.post;
 // funktion für partial scan
 //funktion für random partial scan
 //organisches weißes rauschen ( alla meer )
+//funktion für stauchen und strecken
 
 
 
