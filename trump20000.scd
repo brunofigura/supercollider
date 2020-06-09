@@ -54,7 +54,7 @@ a.partials.size.post;
 //funktion für random partial scan
 //organisches weißes rauschen ( alla meer )
 //funktion für stauchen und strecken
-
+// interlacing funktion neues array aus 2 files.
 
 
 
@@ -64,7 +64,7 @@ a.partials.size.post;
 ~stretchAll = {|syntharray|
 var polarity = ((-1 ! (b.size/2))++(1 ! ((b.size/2)+1))).asArray;
 
-syntharray.do{|x, i| x.set(\detuneamt, 200, \trig, 0, \detunetime, 5)};
+syntharray.do{|x, i| x.set(\detuneamt, 200, \trig, 0, \detunetime, 0)};
 syntharray.do{|x, i| x.set(\detuneamt, (200* i) * polarity , \trig, 1, \detunetime, 1)};
 }
 )
