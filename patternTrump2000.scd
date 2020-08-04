@@ -1,0 +1,1 @@
+//trump2000 als Pattern

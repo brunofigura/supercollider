@@ -23,6 +23,8 @@
 }).add;
 )
 a = Synth(\add);
+a.set(\amp, 0);
+a.set(\amp, 0.2);
 
 
 (
@@ -30,9 +32,9 @@ Pdef(\x, Pbind(
 	\instrument,\add,
 	\scale, Scale.at(\harmonicMinor),
 	\degree, Pseq([0, 2, 1, 1, 2, 0], inf),
-	\legato, Prand([0.1, 0.5, 1, 4], inf),
-	\dur, Pseq([0.6, 0.6, 0.6, 0.4], inf),
-	\octave, Pseq([4, 4, 5, 4, 5], inf)
+	\legato, Prand([0.1, 0.5, 0.2, 0], inf),
+	\dur, Pseq([0.6, 0.6, 0.6, 0.4] * 0.2, inf),
+	\octave, Pseq([4, 4, 5, 4, 5]+1, inf)
 )).play;
 )
 // noch erweitern
