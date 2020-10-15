@@ -47,7 +47,7 @@ SynthDef.new(\dly, {|in, out = 0, time=0.3, decay = 1|
 }
 
 
-~sourceGroup.set(\dens, 0.5);
+~sourceGroup.set(\decay, 1);
 
 y = Synth.new(\vrb, [\in, ~vrbBus], ~fxGroup);
 
