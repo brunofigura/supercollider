@@ -85,17 +85,17 @@ Tdef(\test).play;
 //////////////////////////////////////////////////////
 (
 SynthDef(\bpfsaw2, {|atk = 2, sus=0, rel=3, c1=1, c2=(-1),
-					freq=300, cfmin = 500,cfmax=5000, rqmin=0.1, rqmax=0.3, amp=1, out=0, detune=0.3|
+					freq=300, cfmin = 500,cfmax=5000, rqmin=0.1, rqmax=0.3, amp=1, out=0, detune=0.3, pan = 0|
 	var sig, env;
 	env = EnvGen.kr(Env([0,1,1,0],[atk,sus, rel],[c1, 0, c2]), doneAction:2);
 	sig = Saw.ar(freq * LFNoise1.kr(0.5, detune).midiratio);//detune in semitones angegeben
 	sig = BPF.ar(
 		sig,
-		LFNoise1.kr(0.2).exprange(cfmin, cfmax),
-		LFNoise1.kr(0.1).exprange(rqmin, rqmax)
+		{LFNoise1.kr(0.2).exprange(cfmin, cfmax)}!2,
+		{LFNoise1.kr(0.1).exprange(rqmin, rqmax)}!2
 	);
+	sig = Balance2.ar(sig[0], sig[1], pan);
 	sig = sig * env * amp;
-	sig = Pan2.ar(sig, 0);
 	Out.ar(out, sig);
 }).add;
 )
@@ -104,11 +104,13 @@ SynthDef(\bpfsaw2, {|atk = 2, sus=0, rel=3, c1=1, c2=(-1),
 	Synth(
 		\bpfsaw2,
 		[
-			\amp, 0.2,
+			\amp, 0.6,
 			\detune, 0.2,
 			\freq, 50,
 			\cfmin, 50*2,
 			\cfmax,50*50,
+			\rqmin, 0.005,
+			\rqmax, 0.03,
 		]
 	)
 };
