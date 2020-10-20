@@ -104,14 +104,42 @@ SynthDef(\bpfsaw2, {|atk = 2, sus=0, rel=3, c1=1, c2=(-1),
 	Synth(
 		\bpfsaw2,
 		[
-			\amp, 0.6,
+			\amp, 0.3,
 			\detune, 0.2,
 			\freq, 50,
 			\cfmin, 50*2,
 			\cfmax,50*50,
-			\rqmin, 0.005,
-			\rqmax, 0.03,
+			\rqmin, 0.05,
+			\rqmax, 0.3
 		]
 	)
 };
+)
+
+(
+10.do{
+	Synth(
+		\bpfsaw2,
+		[
+			\amp, 0.3,
+			\detune, 0.2,
+			\freq, 50,
+			\cfmin, 50*2,
+			\cfmax,50*50,
+			\rqmin, 0.05,
+			\rqmax, 0.3
+		]
+	)
+};
+)
+
+//patternssssssssssssssssssssssssssssssssssssssssssssssssssssss
+(
+Pdef(\x, Pbind(
+	\instrument, \bpfsaw2,
+	\freq, Pseq([50, 55, 80], 2),
+	\cfmin, Pseq([50*2, 55*2, 80*2],2),
+	\cfmax, Prand([1000,2000,5000], inf),
+		)
+	).play;
 )
