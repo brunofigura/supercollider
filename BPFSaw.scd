@@ -137,8 +137,9 @@ SynthDef(\bpfsaw2, {|atk = 2, sus=0, rel=3, c1=1, c2=(-1),
 (
 Pdef(\x, Pbind(
 	\instrument, \bpfsaw2,
-	\freq, Pseq([50, 55, 80], 2),
-	\cfmin, Pseq([50*2, 55*2, 80*2],2),
+	\amp, 0.4,
+	\freq, Pshuf([[2,6], [3,5], [4,50], [100,20]], inf),
+	\cfmin, Prand([5*2, 50*2, [8,80*2]],inf),
 	\cfmax, Prand([1000,2000,5000], inf),
 		)
 	).play;
