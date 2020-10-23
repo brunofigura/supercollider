@@ -4,6 +4,13 @@
 
 	Legende:
 	~ : Persönlicher Kommentar
+
+	Idee: SynthDefs zum erzeugen von Vokalen und Konsonaten. Parameter so wählen dass andere Stimmfarben rauskommen.
+		dann mit Musikinstrument zusammen (am besten lyra8) als balance. Es soll erkennen ob ext. Instrument aggresiv klingt dann samfte untermahlung
+		oder wenn Musikinstrument samft klingt dann aggressive untermahlung. -> ständer gegenüberstellung der gefühle. The Great Balancing
+
+	Andere Bücher: 	Roland Barthes, Grain of the voice
+			
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 Buch: Singing the Body Electric (Lesezeichenliste)
@@ -19,4 +26,11 @@ Buch: Singing the Body Electric (Lesezeichenliste)
 
 	[...], the mouth an aperture that expresses the inner human to the outer world. (Page 3)
 		~what would a machine/computer/hybrid use to express its inner self to the outside
+
+	[...], before ful consciousness, one hears the rhythms and flow of mother's voice, 
+	coupled with the sensation of simultaneously feeling and hearing
+	the resonsanves o the chest and the bellows-system of the diapgragm. (Page 4)
+		~wie würde sich das anhören, kann man das simulieren?
+
+	
 
