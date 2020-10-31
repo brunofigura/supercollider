@@ -21,12 +21,30 @@ File.use("B:/supercolider-git/supercollider/spear data/SDIFtest.sdif", "r", {|f|
 	f.getChar;
 	f.getChar;
 	f.getChar;
-	f.getChar;
+	f.getChar(4);
 });
 )
-//wirft "random" Zahlen aus abhängig ob man Int8, INt16, Int32, Int32LE
 (
-File.use("B:/supercolider-git/supercollider/spear data/SDIFtest.sdif", "r", {|f|
-	f.getInt32;
+File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
+	f.contents;
+});
+)
+
+
+(
+File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
+	f.next
+});
+)
+
+
+
+(
+File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
+	if(f.getLine != "SDIF", {
+		"Error! Wrong Filetype".error.postln;
+	}, {"This is a SDIF File!"});
+
+
 });
 )
