@@ -33,7 +33,13 @@ File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
 
 (
 File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	f.next
+	f.getChar.postln;
+	f.getChar.postln;
+	f.getChar.postln;
+	f.getChar.postln;
+	f.pos.postln;
+	f.getInt32.postln;
+	f.getInt32.postln;
 });
 )
 
@@ -41,10 +47,19 @@ File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
 
 (
 File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	if(f.getLine != "SDIF", {
+	if(f.getLine(4) != "SDIF", {
 		"Error! Wrong Filetype".error.postln;
-	}, {"This is a SDIF File!"});
-
+	}, {"This is a SDIF File!".postln});
+	f.pos.postln;
+	f.getInt32;
 
 });
 )
+
+(
+File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
+	a = 4.collect({f.getChar});
+	a.asString.postln; // wie kann ich ein Array als String vergleichen
+});
+)
+
