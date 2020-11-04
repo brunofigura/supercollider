@@ -26,20 +26,25 @@ File.use("B:/supercolider-git/supercollider/spear data/SDIFtest.sdif", "r", {|f|
 )
 (
 File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	f.contents;
+	f.length;
 });
 )
 
 
 (
 File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	f.getChar.postln;
-	f.getChar.postln;
-	f.getChar.postln;
-	f.getChar.postln;
+
+	4.do({f.getChar.post;});
+
 	f.pos.postln;
 	f.getInt32.postln;
 	f.getInt32.postln;
+
+	4.do({f.getChar;});
+	4.do({f.getChar.post;});
+	f.getChar;
+	f.getChar;
+	f.getChar.asAscii;
 });
 )
 
