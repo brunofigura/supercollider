@@ -4,7 +4,7 @@ SpearFile2
 File.use("B:/supercolider-git/supercollider/spear data/SDIFtest.sdif", "r", {|f|
 	var fileType, headerSpecialFrameSize, sdifVersion, frameSignature1, frameSize, frameTime, frameStreamID, frameMatrixCount;
 
-	fileType = 4.collect({f.getChar});
+	fileType = 4.collect({f.getChar});								//wie kann ich das als String speichern und ausgeben?
 	postf("Das Format der Datei ist: % \n", fileType);
 
 	headerSpecialFrameSize = f.getInt32;
@@ -34,61 +34,9 @@ File.use("B:/supercolider-git/supercollider/spear data/SDIFtest.sdif", "r", {|f|
 	//ab hier Matrixheader
 	4.do({f.getChar.post;});					//Matrix signature "1nvt"
 	f.pos;
+	8.do({f.getChar.asAscii.post;});			//nach meiner Idee sollten hier 8 ASCII Symbole ausgegeben werden.
 
-});
-)
-
-//macht komisches aber anders als getLine
-(
-File.use("B:/supercolider-git/supercollider/spear data/SDIFtest.sdif", "r", {|f|
-	f.getChar;
-	f.getChar;
-	f.getChar;
-	f.getChar;
-	f.getChar(4);
-});
-)
-(
-File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	f.length;
-});
-)
-
-
-(
-File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-
-	4.do({f.getChar.post;});
-
-	f.pos.postln;
-	f.getInt32.postln;
-	f.getInt32.postln;
-
-	4.do({f.getChar;});
-	4.do({f.getChar.post;});
-	f.getChar;
-	f.getChar;
-	f.getChar.asAscii;
-});
-)
-
-
-
-(
-File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	if(f.getLine(4) != "SDIF", {
-		"Error! Wrong Filetype".error.postln;
-	}, {"This is a SDIF File!".postln});
-	f.pos.postln;
-	f.getInt32;
-
-});
-)
-
-(
-File.use("SDIFtest.sdif".resolveRelative, "r", {|f|
-	a = 4.collect({f.getChar});
-	a.asString.postln; // wie kann ich ein Array als String vergleichen
+	//Wie komme ich an name value pairs innerhalb von "{}", wenn alles in ASCII ist?
 });
 )
 
