@@ -1,0 +1,56 @@
+s.boot;
+
+(
+SynthDef.new(\blip, {
+	var sig, env;
+	sig = Saw.ar(\freq.ir(1000));
+	env = Env(
+		[0, 1, 1, 0],
+		[\atk.ir(0), \sus.ir(0.05), \rel.ir(0)],
+		[\atkcrv.ir(2), \relcrv.ir(-2)]
+	).ar(2);
+
+	sig = sig * env;
+	sig = Pan2.ar(sig, \pan.ir(0), \amp.ir(0.3));
+
+	Out.ar(\out.ir(0), sig);
+	Out.ar(\outfx.ir(0), sig * \send.ir(-30).dbamp);
+}).add;
+)
+
+Synth(\blip, [\freq, 300]);
+(
+Tdef.new(\key, {
+	loop{
+		Synth(\blip, [\freq, 50, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+}}).play;
+)
+
+
+~buf = Buffer.read(s,"B:/Musik/AA-eigenes/tests/fieldrec(eq+c).wav" );
+
+(
+SynthDef.new(\sample, {
+	var sig, env;
+	sig = PlayBuf.ar(2, \buf.ir(0), BufRateScale.ir(\buf.ir(0))*\rate.ir(1), 1, \spos.ir(0));
+
+	env = Env(
+		[0, 1, 1, 0],
+		[\atk.ir(0), \sus.ir(0.5), \rel.ir(0.7)],
+		\lin
+	).ar(2);
+
+	sig = sig * env;
+	sig = Pan2.ar(sig, \pan.ir(0), \amp.ir(0.4));
+
+	Out.ar(\out.ir(0), sig);
+	Out.ar(\outfx.ir(0), sig * \send.ir(-30).dbamp);
+}).add;
+)
+(
+Synth(\sample, [\buf, ~buf,
+	\rate, [0.5, 0.6]]
+);
+
+)

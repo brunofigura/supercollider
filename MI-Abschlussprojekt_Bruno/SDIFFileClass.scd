@@ -34,9 +34,3 @@ SDIFMatrix1TRC{
 	var numRows, numCols;
 
 }
-
-a = SDFIFile.read
-
-a = SDIFFile.new
-
-a.read(path)
