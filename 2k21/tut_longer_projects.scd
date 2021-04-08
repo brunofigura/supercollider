@@ -22,11 +22,35 @@ Synth(\blip, [\freq, 300]);
 (
 Tdef.new(\key, {
 	loop{
-		Synth(\blip, [\freq, 50, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
+		Synth(\blip, [\freq, 34.midicps, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+		Synth(\blip, [\freq, 34.midicps, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+		Synth(\blip, [\freq, 36.midicps, \rel, 0.2, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+		Synth(\blip, [\freq, 32.midicps, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+		Synth(\blip, [\freq, 34.midicps, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+		Synth(\blip, [\freq, 34.midicps, \rel, 0.1, \relcrv, 0, \pan, 	1.0.rand2]);
+		0.2.wait;
+		Synth(\blip, [\freq, 34.midicps, \rel, 0.4, \relcrv, 0, \pan, 	1.0.rand2]);
 		0.2.wait;
 }}).play;
-)
 
+
+Tdef.new(\key2, {
+	loop{
+		Synth(\blip, [\freq, 60.midicps, \rel, 1.2, \relcrv, 0, \pan, 	1.0.rand2]);
+		2.wait;
+		Synth(\blip, [\freq, 63.midicps, \rel, 0.8, \relcrv, 0, \pan, 	1.0.rand2]);
+		2.wait;
+		Synth(\blip, [\freq, 65.midicps, \rel, 1.5, \relcrv, 0, \pan, 	1.0.rand2]);
+		2.wait;
+		Synth(\blip, [\freq, 61.midicps, \rel, 1.5, \relcrv, 0, \pan, 	1.0.rand2]);
+		2.wait;
+}}).play;
+)
 
 ~buf = Buffer.read(s,"B:/Musik/AA-eigenes/tests/fieldrec(eq+c).wav" );
 
