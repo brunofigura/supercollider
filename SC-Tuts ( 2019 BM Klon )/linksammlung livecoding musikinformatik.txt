@@ -1,0 +1,16 @@
+https://toplap.org/
+https://algorave.com/
+Alex McLean:  https://www.youtube.com/channel/UC-id0vwQoAUYBNCm0nmaqQw
+Rennick Bell: https://renickbell.bandcamp.com/
+Eli Fieldsteel https://www.youtube.com/playlist?list=PLPYzvS8A_rTaNDweXe6PX4CXSGq4iEWYC
+SC140 https://archive.org/details/sc140
+LiveCoding Düsseldorf: Jeden 2 Montag im Monat Super7000
+					   LiveCoding Performace 13.11
+
+Andrew Sorensen Extempore: https://www.youtube.com/watch?v=yY1FSsUV-8c
+
+Audio zwischen Apps routen:
+Soundflower: https://github.com/mattingalls/Soundflower/releases
+Loopback: https://rogueamoeba.com/loopback/
+Blackhole: https://github.com/ExistentialAudio/BlackHole
+Jack: https://jackaudio.org/
