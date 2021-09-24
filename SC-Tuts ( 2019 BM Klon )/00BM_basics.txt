@@ -1,0 +1,89 @@
+internet: wifi „experimentallabor“ pwd: immimmimm
+dropbox: mail v julian
+
+
+SuperCollider Download:
+
+http://supercollider.github.io/download.html
+
+-> “latest version”
+
+
+sc3plugins
+
+
+https://github.com/supercollider/sc3-plugins/releases
+
+-> in /Library/Application Support/SuperCollider/Extensions
+  (notfalls den ordner „Extensions“ anlegen)
+
+
+
+
+macOS: xcode und commandline tools installieren	
+
+
+SuperCollider 
+
+Code:
+http://sccode.org/
+twitter: #supercollider
+
+Tidal:
+
+
+http://tidalcycles.org/
+
+
+Pure Data:
+http://puredata.info
+
+Arduino:
+
+
+http://arduino.cc/
+Arduino  -> 
+https://www.arduino.cc/en/Main/Software
+
+Teensyduino (arduino plugin):
+
+
+https://www.pjrc.com/teensy/td_download.html
+
+
+
+
+
+Zusätzliches:
+
+
+
+Audacity: http://www.audacityteam.org/
+
+Sonic Visualizer
+
+
+http://www.sonicvisualiser.org/download.html
+
+
+
+Apple Developer Tools:
+
+
+https://developer.apple.com/xcode/downloads/
+
+
+
+Homebrew
+
+
+http://brew.sh/
+
+Anaconda (für sog. "Library packages")
+
+
+http://continuum.io/downloads
+
+VCV Rack
+https://vcvrack.com/
+
