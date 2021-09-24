@@ -25,7 +25,7 @@
 a = Synth(\add);
 a.set(\amp, 0);
 a.set(\amp, 0.2);
-
+a.free
 
 (
 Pdef(\x, Pbind(
