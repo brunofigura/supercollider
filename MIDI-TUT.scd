@@ -210,3 +210,4 @@ MIDIdef.cc(\feedback, {
 	~notes.do{arg synth; synth.set(\feedback, val.linlin(0, 127, 0, 1.5))};
 }, ccNum:70, chan:0);
 )
+
