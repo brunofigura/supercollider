@@ -45,17 +45,18 @@ SynthDef.new(\grainz, {|out, dur = 0.5, pan = 0, rate = 1, att = 0, rel = 4|
 		rate: rate,
 		pos: Rand(0.0, 1.0)!2,
 		interp: 2,
-		pan: pan,
+		pan: 0,
 		envbufnum: -1,
 		maxGrains: 512,
 		mul: EnvGen.ar(Env([0, 1,0], [att, rel]), doneAction: Done.freeSelf),
 		add: 0
 	);
+	sig = PanAz.ar(2, sig, pan);
 	Out.ar(out, sig);
 }).add;
 )
 
-(instrument: \grainz, dur: rand(0.2, 0.8), rate: 1).play;
+(instrument: \grainz, dur: rand(0.2, 0.8), rate: 0.midiratio).play;
 
 /*
 Wie möchte ich das System benutzen?
