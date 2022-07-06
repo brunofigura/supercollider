@@ -23,7 +23,7 @@ SynthDef.new(\default, {|out|
 		interp: 2,
 		pan: 0,
 		envbufnum: -1,
-		maxGrains: 512,
+		maxGrains: 1048,
 		mul: EnvGen.ar(Env([1,0], [1]), doneAction: Done.freeSelf),
 		add: 0
 	);
@@ -39,7 +39,7 @@ SynthDef.new(\default, {|out|
 SynthDef.new(\grainz, {|out, dur = 0.5, pan = 0, rate = 1, att = 0, rel = 4|
 	var sig;
 	sig = GrainBuf.ar(numChannels: 1,
-		trigger: Dust.ar([21, 22]),
+		trigger: Dust.ar([45, 43]),
 		dur: dur,
 		sndbuf: b,
 		rate: rate,
@@ -47,7 +47,7 @@ SynthDef.new(\grainz, {|out, dur = 0.5, pan = 0, rate = 1, att = 0, rel = 4|
 		interp: 2,
 		pan: 0,
 		envbufnum: -1,
-		maxGrains: 512,
+		maxGrains: 1048,
 		mul: EnvGen.ar(Env([0, 1,0], [att, rel]), doneAction: Done.freeSelf),
 		add: 0
 	);
@@ -56,7 +56,14 @@ SynthDef.new(\grainz, {|out, dur = 0.5, pan = 0, rate = 1, att = 0, rel = 4|
 }).add;
 )
 
-(instrument: \grainz, dur: rand(0.2, 0.8), rate: 0.midiratio).play;
+(instrument: \grainz, dur: rand(0.025, 0.05), rate: 0.midiratio).play;
+
+
+/*
+neuster Plan. 2 Unterschiedliche Spacialisation Methoden überlegen und 2 unterschiedliche trigger Konditionen und damit dann Pdefs bauen.
+*/
+
+
 
 /*
 Wie möchte ich das System benutzen?
@@ -72,3 +79,39 @@ Wie möchte ich das System benutzen?
 /*
 pitch shifter ausprobieren :D
 */
+
+(
+SynthDef.new(\granulator, {
+	arg out, densityL = 5, densityR = 6, dur = 1, rate = 1, pos = 0.5, interp = 2, att = 0, rel = 0.5, pan = 0;
+	var sig;
+	sig = GrainBuf.ar(
+		numChannels: 1,
+		trigger: Dust.ar([densityL, densityR]),
+		dur: dur,
+		sndbuf: b,
+		rate: rate,
+		pos: pos,
+		interp: interp,
+		pan: 0,
+		envbufnum: -1,
+		maxGrains: 1048,
+		mul: EnvGen.ar(Env([0, 1,0], [att, rel]), doneAction: Done.freeSelf),
+		add: 0
+	);
+	sig = PanAz.ar(2, sig, pan);
+	Out.ar(out, sig);
+}).add;
+)
+
+(instrument: \granulator, dur: rand(0.025, 0.05), rate: 0.midiratio).play;
+
+(
+Pdef(\x,
+	Pbind(\instrument, \granulator,
+		\pos, Prand([0.1, 0.2, 0.3, 0.4], inf),
+		\rel, Pseq([0.5, 0.5, 2, 1], inf),
+		\densityL, 5,
+		\densityR, 6
+	)
+).play;
+)

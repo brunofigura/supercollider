@@ -204,10 +204,16 @@ MIDIdef.bend(\bend, {
 
 (
 MIDIdef.cc(\feedback, {
-	arg val, chan, src;
-	[val, chan, src].postln;
-	~feedback = val;
-	~notes.do{arg synth; synth.set(\feedback, val.linlin(0, 127, 0, 1.5))};
-}, ccNum:70, chan:0);
+arg vel, nn, chan, src;				//args expected for noteOn, see MIDIFunc
+	[vel, nn, chan, src].postln;		//printing args but naming them diffrently
+	~notes[nn] = Synth.new(\synth, [
+			\freq, nn.midicps,
+			\amp, vel.linexp(1,127,0.01,0.3),
+			\gate, 1,
+			\bend, ~bend.linlin(0,16383,-2,-2) ,		//so initial bend values are aknowledged---DOESNT WORK PROEPERLY
+			\feedback, ~feedback.linlin(0, 127, 0, 1.5),// so initial feedback value starts not everytime at 0
+		]
+	);
+}, ccNum:17, chan:0);
 )
 
