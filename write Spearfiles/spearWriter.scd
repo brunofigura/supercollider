@@ -3,12 +3,16 @@
 ~data2.headerSpecialFrameSize;
 
 
+[[1, 200, 0.5, 0], [2, 300, 0.5, 0], [3, 400, 0.5, 0], [4, 500, 0.5, 0], [5, 600, 0.5, 0]]
+
 //MacOS Pfad"/Users/brunofigura/Documents/supercollider_git/writtenData/test1.sdif"
 //creating SDIF file with File header
 
 (
-//f = File.new("B:/supercolider-git/supercollider/writtenData/test1.sdif", "w");					//Windows Pfad
-f = File.new("/Users/brunofigura/Documents/supercollider_git/writtenData/test1.sdif", "w");		//MacOS Pfad
+f = File.new("B:/supercolider-git/supercollider/writtenData/test1.sdif", "w");					//Windows Pfad
+//f = File.new("/Users/brunofigura/Documents/supercollider_git/writtenData/test1.sdif", "w");		//MacOS Pfad
+
+var frameSize = 16;
 
 f.write("SDIF");				//signature "SDIF"
 f.putInt32(8);			//Header Special Frame Size
